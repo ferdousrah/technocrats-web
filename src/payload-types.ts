@@ -76,6 +76,8 @@ export interface Config {
     projects: Project;
     'team-members': TeamMember;
     testimonials: Testimonial;
+    'blog-categories': BlogCategory;
+    'blog-tags': BlogTag;
     blog: Blog;
     'contact-inquiries': ContactInquiry;
     'payload-kv': PayloadKv;
@@ -94,6 +96,8 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
+    'blog-tags': BlogTagsSelect<false> | BlogTagsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     'contact-inquiries': ContactInquiriesSelect<false> | ContactInquiriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -1161,6 +1165,66 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-categories".
+ */
+export interface BlogCategory {
+  id: number;
+  /**
+   * e.g., AI & Machine Learning, Web Development, Case Studies, etc.
+   */
+  name: string;
+  /**
+   * Auto-generated from name. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Brief description of this blog category
+   */
+  description?: string | null;
+  /**
+   * Hex color code for UI theming (e.g., #2196F3)
+   */
+  color?: string | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-tags".
+ */
+export interface BlogTag {
+  id: number;
+  /**
+   * e.g., JavaScript, TypeScript, AI, Machine Learning, etc.
+   */
+  name: string;
+  /**
+   * Auto-generated from name. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Brief description of this tag
+   */
+  description?: string | null;
+  /**
+   * Hex color code for UI theming (e.g., #10B981)
+   */
+  color?: string | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog".
  */
 export interface Blog {
@@ -1179,7 +1243,7 @@ export interface Blog {
    */
   excerpt: string;
   /**
-   * Full article content
+   * Full article content with enhanced formatting options
    */
   content: {
     root: {
@@ -1203,25 +1267,11 @@ export interface Blog {
   /**
    * Article category
    */
-  category:
-    | 'ai-ml'
-    | 'web-dev'
-    | 'mobile'
-    | 'automation'
-    | 'case-studies'
-    | 'insights'
-    | 'trends'
-    | 'tutorials'
-    | 'news';
+  category: number | BlogCategory;
   /**
    * Article tags for better searchability
    */
-  tags?:
-    | {
-        tag: string;
-        id?: string | null;
-      }[]
-    | null;
+  tags?: (number | BlogTag)[] | null;
   /**
    * Related services mentioned in the article
    */
@@ -1441,6 +1491,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'testimonials';
         value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'blog-categories';
+        value: number | BlogCategory;
+      } | null)
+    | ({
+        relationTo: 'blog-tags';
+        value: number | BlogTag;
       } | null)
     | ({
         relationTo: 'blog';
@@ -1968,6 +2026,34 @@ export interface TestimonialsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-categories_select".
+ */
+export interface BlogCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  color?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-tags_select".
+ */
+export interface BlogTagsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  color?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog_select".
  */
 export interface BlogSelect<T extends boolean = true> {
@@ -1978,12 +2064,7 @@ export interface BlogSelect<T extends boolean = true> {
   content?: T;
   featuredImage?: T;
   category?: T;
-  tags?:
-    | T
-    | {
-        tag?: T;
-        id?: T;
-      };
+  tags?: T;
   relatedServices?: T;
   relatedProjects?: T;
   readTime?: T;

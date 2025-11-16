@@ -2,6 +2,19 @@ import type { CollectionConfig } from 'payload'
 import { isAuthorOrAdmin, isPublic } from '../access'
 import { getSeoFields, jsonLdFields } from '../fields/seo'
 import { formatSlug } from '../hooks/slugify'
+import {
+  BlocksFeature,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  StrikethroughFeature,
+  HeadingFeature,
+  LinkFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  InlineCodeFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 export const Blog: CollectionConfig = {
   slug: 'blog',
@@ -57,8 +70,127 @@ export const Blog: CollectionConfig = {
       name: 'content',
       type: 'richText',
       required: true,
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }),
+          BoldFeature(),
+          ItalicFeature(),
+          UnderlineFeature(),
+          StrikethroughFeature(),
+          InlineCodeFeature(),
+          LinkFeature({
+            enabledCollections: ['blog', 'services', 'products', 'projects'],
+            fields: [
+              {
+                name: 'rel',
+                type: 'select',
+                label: 'Rel Attribute',
+                hasMany: true,
+                options: [
+                  { label: 'noopener', value: 'noopener' },
+                  { label: 'noreferrer', value: 'noreferrer' },
+                  { label: 'nofollow', value: 'nofollow' },
+                ],
+              },
+            ],
+          }),
+          OrderedListFeature(),
+          UnorderedListFeature(),
+          BlocksFeature({
+            blocks: [
+              {
+                slug: 'code',
+                fields: [
+                  {
+                    name: 'language',
+                    type: 'select',
+                    required: true,
+                    defaultValue: 'javascript',
+                    options: [
+                      { label: 'JavaScript', value: 'javascript' },
+                      { label: 'TypeScript', value: 'typescript' },
+                      { label: 'Python', value: 'python' },
+                      { label: 'Java', value: 'java' },
+                      { label: 'C#', value: 'csharp' },
+                      { label: 'C++', value: 'cpp' },
+                      { label: 'Go', value: 'go' },
+                      { label: 'Rust', value: 'rust' },
+                      { label: 'PHP', value: 'php' },
+                      { label: 'Ruby', value: 'ruby' },
+                      { label: 'HTML', value: 'html' },
+                      { label: 'CSS', value: 'css' },
+                      { label: 'SQL', value: 'sql' },
+                      { label: 'Bash', value: 'bash' },
+                      { label: 'JSON', value: 'json' },
+                      { label: 'YAML', value: 'yaml' },
+                      { label: 'Markdown', value: 'markdown' },
+                    ],
+                  },
+                  {
+                    name: 'code',
+                    type: 'code',
+                    required: true,
+                    admin: {
+                      language: 'javascript',
+                    },
+                  },
+                ],
+              },
+              {
+                slug: 'image',
+                fields: [
+                  {
+                    name: 'image',
+                    type: 'upload',
+                    relationTo: 'media',
+                    required: true,
+                  },
+                  {
+                    name: 'caption',
+                    type: 'text',
+                  },
+                  {
+                    name: 'alignment',
+                    type: 'select',
+                    defaultValue: 'center',
+                    options: [
+                      { label: 'Left', value: 'left' },
+                      { label: 'Center', value: 'center' },
+                      { label: 'Right', value: 'right' },
+                      { label: 'Full Width', value: 'full' },
+                    ],
+                  },
+                ],
+              },
+              {
+                slug: 'callout',
+                fields: [
+                  {
+                    name: 'type',
+                    type: 'select',
+                    required: true,
+                    defaultValue: 'info',
+                    options: [
+                      { label: 'Info', value: 'info' },
+                      { label: 'Warning', value: 'warning' },
+                      { label: 'Success', value: 'success' },
+                      { label: 'Error', value: 'error' },
+                    ],
+                  },
+                  {
+                    name: 'content',
+                    type: 'richText',
+                    required: true,
+                  },
+                ],
+              },
+            ],
+          }),
+        ],
+      }),
       admin: {
-        description: 'Full article content',
+        description: 'Full article content with enhanced formatting options',
       },
     },
     {
@@ -72,34 +204,19 @@ export const Blog: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'blog-categories',
       required: true,
-      options: [
-        { label: 'AI & Machine Learning', value: 'ai-ml' },
-        { label: 'Web Development', value: 'web-dev' },
-        { label: 'Mobile Development', value: 'mobile' },
-        { label: 'Business Automation', value: 'automation' },
-        { label: 'Case Studies', value: 'case-studies' },
-        { label: 'Industry Insights', value: 'insights' },
-        { label: 'Technology Trends', value: 'trends' },
-        { label: 'Tutorials', value: 'tutorials' },
-        { label: 'Company News', value: 'news' },
-      ],
       admin: {
         description: 'Article category',
       },
     },
     {
       name: 'tags',
-      type: 'array',
+      type: 'relationship',
+      relationTo: 'blog-tags',
+      hasMany: true,
       required: false,
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-          required: true,
-        },
-      ],
       admin: {
         description: 'Article tags for better searchability',
       },
