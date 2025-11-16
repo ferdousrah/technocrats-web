@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isEditor, isPublic } from '../access'
 
 export const ServiceTypes: CollectionConfig = {
   slug: 'service-types',
@@ -7,7 +8,10 @@ export const ServiceTypes: CollectionConfig = {
     defaultColumns: ['name', 'slug', 'order', 'status'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isEditor,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {

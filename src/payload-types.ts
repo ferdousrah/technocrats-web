@@ -137,6 +137,30 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * User first name
+   */
+  firstName?: string | null;
+  /**
+   * User last name
+   */
+  lastName?: string | null;
+  /**
+   * User roles for access control
+   */
+  roles: ('super-admin' | 'admin' | 'editor' | 'author' | 'user')[];
+  /**
+   * User profile picture
+   */
+  avatar?: (number | null) | Media;
+  /**
+   * User biography
+   */
+  bio?: string | null;
+  /**
+   * Contact phone number
+   */
+  phone?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -161,7 +185,21 @@ export interface User {
  */
 export interface Media {
   id: number;
+  /**
+   * Alternative text for accessibility and SEO
+   */
   alt: string;
+  /**
+   * Image caption (optional)
+   */
+  caption?: string | null;
+  /**
+   * Focal point for cropping
+   */
+  focalPoint?: {
+    x?: number | null;
+    y?: number | null;
+  };
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -173,6 +211,40 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    desktop?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -283,6 +355,74 @@ export interface Service {
    */
   order?: number | null;
   status: 'draft' | 'published';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Canonical URL for duplicate content management
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -531,11 +671,6 @@ export interface Product {
    * Projects using this product
    */
   relatedProjects?: (number | Project)[] | null;
-  seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    keywords?: string | null;
-  };
   /**
    * Feature this product on homepage
    */
@@ -545,6 +680,74 @@ export interface Product {
    */
   order?: number | null;
   status: 'draft' | 'published' | 'coming-soon' | 'retired';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Canonical URL for duplicate content management
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -651,6 +854,74 @@ export interface Project {
    */
   order?: number | null;
   status: 'draft' | 'published';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Canonical URL for duplicate content management
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -737,6 +1008,74 @@ export interface TeamMember {
    */
   order?: number | null;
   status: 'active' | 'inactive';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Canonical URL for duplicate content management
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -866,20 +1205,6 @@ export interface Blog {
    * Related projects mentioned in the article
    */
   relatedProjects?: (number | Project)[] | null;
-  seo?: {
-    /**
-     * SEO title (defaults to article title if empty)
-     */
-    metaTitle?: string | null;
-    /**
-     * SEO meta description (max 160 characters)
-     */
-    metaDescription?: string | null;
-    /**
-     * SEO keywords (comma-separated)
-     */
-    keywords?: string | null;
-  };
   /**
    * Estimated read time in minutes
    */
@@ -893,6 +1218,74 @@ export interface Blog {
    */
   publishedDate?: string | null;
   status: 'draft' | 'published';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Canonical URL for duplicate content management
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1075,6 +1468,12 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  roles?: T;
+  avatar?: T;
+  bio?: T;
+  phone?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1098,6 +1497,13 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  focalPoint?:
+    | T
+    | {
+        x?: T;
+        y?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1109,6 +1515,50 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tablet?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        desktop?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1157,6 +1607,26 @@ export interface ServicesSelect<T extends boolean = true> {
   featured?: T;
   order?: T;
   status?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
+        ogImage?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+      };
+  jsonLd?:
+    | T
+    | {
+        enabled?: T;
+        schemaType?: T;
+        customSchema?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1273,16 +1743,29 @@ export interface ProductsSelect<T extends boolean = true> {
   lastUpdate?: T;
   changelog?: T;
   relatedProjects?: T;
+  featured?: T;
+  order?: T;
+  status?: T;
   seo?:
     | T
     | {
         metaTitle?: T;
         metaDescription?: T;
         keywords?: T;
+        ogImage?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
       };
-  featured?: T;
-  order?: T;
-  status?: T;
+  jsonLd?:
+    | T
+    | {
+        enabled?: T;
+        schemaType?: T;
+        customSchema?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1333,6 +1816,26 @@ export interface ProjectsSelect<T extends boolean = true> {
   featured?: T;
   order?: T;
   status?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
+        ogImage?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+      };
+  jsonLd?:
+    | T
+    | {
+        enabled?: T;
+        schemaType?: T;
+        customSchema?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1375,6 +1878,26 @@ export interface TeamMembersSelect<T extends boolean = true> {
       };
   order?: T;
   status?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
+        ogImage?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
+      };
+  jsonLd?:
+    | T
+    | {
+        enabled?: T;
+        schemaType?: T;
+        customSchema?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1419,17 +1942,30 @@ export interface BlogSelect<T extends boolean = true> {
       };
   relatedServices?: T;
   relatedProjects?: T;
+  readTime?: T;
+  featured?: T;
+  publishedDate?: T;
+  status?: T;
   seo?:
     | T
     | {
         metaTitle?: T;
         metaDescription?: T;
         keywords?: T;
+        ogImage?: T;
+        ogTitle?: T;
+        ogDescription?: T;
+        canonicalUrl?: T;
+        noIndex?: T;
+        noFollow?: T;
       };
-  readTime?: T;
-  featured?: T;
-  publishedDate?: T;
-  status?: T;
+  jsonLd?:
+    | T
+    | {
+        enabled?: T;
+        schemaType?: T;
+        customSchema?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

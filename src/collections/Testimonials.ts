@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isEditor, isPublic } from '../access'
 
 export const Testimonials: CollectionConfig = {
   slug: 'testimonials',
@@ -7,7 +8,10 @@ export const Testimonials: CollectionConfig = {
     defaultColumns: ['clientName', 'company', 'rating', 'featured', 'status'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isEditor,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {

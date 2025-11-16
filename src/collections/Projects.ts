@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { isEditor, isPublic } from '../access'
+import { seoFields, jsonLdFields } from '../fields/seo'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
@@ -7,7 +9,10 @@ export const Projects: CollectionConfig = {
     defaultColumns: ['title', 'client', 'serviceType', 'featured', 'status'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isEditor,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {
@@ -195,5 +200,7 @@ export const Projects: CollectionConfig = {
         { label: 'Published', value: 'published' },
       ],
     },
+    ...seoFields,
+    ...jsonLdFields,
   ],
 }
