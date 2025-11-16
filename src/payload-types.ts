@@ -69,6 +69,12 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    services: Service;
+    projects: Project;
+    'team-members': TeamMember;
+    testimonials: Testimonial;
+    blog: Blog;
+    'contact-inquiries': ContactInquiry;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +84,12 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    services: ServicesSelect<false> | ServicesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
+    'contact-inquiries': ContactInquiriesSelect<false> | ContactInquiriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -160,6 +172,500 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services".
+ */
+export interface Service {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly version of the title
+   */
+  slug: string;
+  /**
+   * Primary service category
+   */
+  category: 'ai-ml' | 'ai-agent' | 'automation' | 'web-dev' | 'ecommerce' | 'mobile' | 'custom-software';
+  /**
+   * Brief description (max 200 characters) for cards and previews
+   */
+  shortDescription: string;
+  /**
+   * Detailed service description with formatting
+   */
+  fullDescription: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Service icon or image
+   */
+  icon?: (number | null) | Media;
+  /**
+   * Key features or benefits of this service
+   */
+  features?:
+    | {
+        feature: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technologies or tools used for this service
+   */
+  technologies?:
+    | {
+        technology: string;
+        id?: string | null;
+      }[]
+    | null;
+  pricing?: {
+    /**
+     * Starting price (optional)
+     */
+    startingPrice?: number | null;
+    pricingModel?: ('fixed' | 'hourly' | 'project' | 'custom') | null;
+  };
+  /**
+   * Feature this service on the homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly version of the title
+   */
+  slug: string;
+  /**
+   * Client or company name
+   */
+  client: string;
+  /**
+   * Services provided for this project
+   */
+  serviceType?: (number | Service)[] | null;
+  /**
+   * Brief project summary (max 250 characters)
+   */
+  summary: string;
+  /**
+   * Detailed project description, challenges, and solutions
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Main project image
+   */
+  featuredImage: number | Media;
+  /**
+   * Additional project images
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technologies, frameworks, and tools used
+   */
+  technologies?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Project outcomes and metrics
+   */
+  results?: {
+    metrics?:
+      | {
+          /**
+           * e.g., "Performance Improvement", "User Growth"
+           */
+          label: string;
+          /**
+           * e.g., "50%", "10,000+ users"
+           */
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Live project URL (if applicable)
+   */
+  projectUrl?: string | null;
+  duration?: {
+    startDate?: string | null;
+    completionDate?: string | null;
+  };
+  /**
+   * Number of team members involved
+   */
+  teamSize?: number | null;
+  /**
+   * Feature this project on the homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  /**
+   * Job title or role
+   */
+  position: string;
+  department?: ('leadership' | 'ai-ml' | 'development' | 'design' | 'pm' | 'sales' | 'support') | null;
+  /**
+   * Professional biography
+   */
+  bio?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Brief bio for team cards (max 150 characters)
+   */
+  shortBio?: string | null;
+  /**
+   * Professional headshot
+   */
+  photo?: (number | null) | Media;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+  };
+  social?: {
+    /**
+     * LinkedIn profile URL
+     */
+    linkedin?: string | null;
+    /**
+     * Twitter/X profile URL
+     */
+    twitter?: string | null;
+    /**
+     * GitHub profile URL
+     */
+    github?: string | null;
+    /**
+     * Personal website URL
+     */
+    website?: string | null;
+  };
+  /**
+   * Key skills and expertise
+   */
+  skills?:
+    | {
+        skill: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Notable achievements or certifications
+   */
+  achievements?:
+    | {
+        achievement: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  clientName: string;
+  /**
+   * Client company or organization
+   */
+  company?: string | null;
+  /**
+   * Client job title
+   */
+  position?: string | null;
+  /**
+   * Testimonial text
+   */
+  content: string;
+  /**
+   * Rating out of 5 stars
+   */
+  rating?: number | null;
+  /**
+   * Client photo or logo
+   */
+  photo?: (number | null) | Media;
+  /**
+   * Related project (optional)
+   */
+  project?: (number | null) | Project;
+  /**
+   * Related service (optional)
+   */
+  service?: (number | null) | Service;
+  /**
+   * YouTube or Vimeo video testimonial URL
+   */
+  videoUrl?: string | null;
+  /**
+   * Feature this testimonial on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'draft' | 'published';
+  /**
+   * Date testimonial was received
+   */
+  dateReceived?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  title: string;
+  /**
+   * URL-friendly version of the title
+   */
+  slug: string;
+  /**
+   * Article author
+   */
+  author: number | User;
+  /**
+   * Brief article summary (max 300 characters)
+   */
+  excerpt: string;
+  /**
+   * Full article content
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Main article image
+   */
+  featuredImage?: (number | null) | Media;
+  /**
+   * Article category
+   */
+  category:
+    | 'ai-ml'
+    | 'web-dev'
+    | 'mobile'
+    | 'automation'
+    | 'case-studies'
+    | 'insights'
+    | 'trends'
+    | 'tutorials'
+    | 'news';
+  /**
+   * Article tags for better searchability
+   */
+  tags?:
+    | {
+        tag: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Related services mentioned in the article
+   */
+  relatedServices?: (number | Service)[] | null;
+  /**
+   * Related projects mentioned in the article
+   */
+  relatedProjects?: (number | Project)[] | null;
+  seo?: {
+    /**
+     * SEO title (defaults to article title if empty)
+     */
+    metaTitle?: string | null;
+    /**
+     * SEO meta description (max 160 characters)
+     */
+    metaDescription?: string | null;
+    /**
+     * SEO keywords (comma-separated)
+     */
+    keywords?: string | null;
+  };
+  /**
+   * Estimated read time in minutes
+   */
+  readTime?: number | null;
+  /**
+   * Feature this article on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Article publication date
+   */
+  publishedDate?: string | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-inquiries".
+ */
+export interface ContactInquiry {
+  id: number;
+  name: string;
+  /**
+   * Contact email address
+   */
+  email: string;
+  /**
+   * Contact phone number (optional)
+   */
+  phone?: string | null;
+  /**
+   * Company or organization name (optional)
+   */
+  company?: string | null;
+  /**
+   * Services interested in
+   */
+  serviceInterest?: (number | Service)[] | null;
+  projectType?: ('new-project' | 'consulting' | 'support' | 'partnership' | 'other') | null;
+  /**
+   * Estimated project budget
+   */
+  budget?: ('under-5k' | '5k-10k' | '10k-25k' | '25k-50k' | '50k-plus' | 'unsure') | null;
+  /**
+   * Desired project timeline
+   */
+  timeline?: ('urgent' | '1-3-months' | '3-6-months' | '6-plus-months' | 'flexible') | null;
+  /**
+   * Inquiry message or project details
+   */
+  message: string;
+  /**
+   * How did they hear about us?
+   */
+  source?: ('search' | 'social' | 'referral' | 'ad' | 'direct' | 'other') | null;
+  /**
+   * Inquiry status for tracking
+   */
+  status:
+    | 'new'
+    | 'in-progress'
+    | 'contacted'
+    | 'qualified'
+    | 'proposal-sent'
+    | 'converted'
+    | 'not-interested'
+    | 'closed';
+  /**
+   * Team member assigned to this inquiry
+   */
+  assignedTo?: (number | null) | User;
+  priority?: ('low' | 'medium' | 'high' | 'urgent') | null;
+  /**
+   * Internal notes (not visible to client)
+   */
+  notes?: string | null;
+  /**
+   * Scheduled follow-up date
+   */
+  followUpDate?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -189,6 +695,30 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'services';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'testimonials';
+        value: number | Testimonial;
+      } | null)
+    | ({
+        relationTo: 'blog';
+        value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'contact-inquiries';
+        value: number | ContactInquiry;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -271,6 +801,211 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "services_select".
+ */
+export interface ServicesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  category?: T;
+  shortDescription?: T;
+  fullDescription?: T;
+  icon?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  technologies?:
+    | T
+    | {
+        technology?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        startingPrice?: T;
+        pricingModel?: T;
+      };
+  featured?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  client?: T;
+  serviceType?: T;
+  summary?: T;
+  description?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  technologies?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  results?:
+    | T
+    | {
+        metrics?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              id?: T;
+            };
+      };
+  projectUrl?: T;
+  duration?:
+    | T
+    | {
+        startDate?: T;
+        completionDate?: T;
+      };
+  teamSize?: T;
+  featured?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  position?: T;
+  department?: T;
+  bio?: T;
+  shortBio?: T;
+  photo?: T;
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+      };
+  social?:
+    | T
+    | {
+        linkedin?: T;
+        twitter?: T;
+        github?: T;
+        website?: T;
+      };
+  skills?:
+    | T
+    | {
+        skill?: T;
+        id?: T;
+      };
+  achievements?:
+    | T
+    | {
+        achievement?: T;
+        id?: T;
+      };
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  clientName?: T;
+  company?: T;
+  position?: T;
+  content?: T;
+  rating?: T;
+  photo?: T;
+  project?: T;
+  service?: T;
+  videoUrl?: T;
+  featured?: T;
+  order?: T;
+  status?: T;
+  dateReceived?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  author?: T;
+  excerpt?: T;
+  content?: T;
+  featuredImage?: T;
+  category?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  relatedServices?: T;
+  relatedProjects?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
+      };
+  readTime?: T;
+  featured?: T;
+  publishedDate?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-inquiries_select".
+ */
+export interface ContactInquiriesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  serviceInterest?: T;
+  projectType?: T;
+  budget?: T;
+  timeline?: T;
+  message?: T;
+  source?: T;
+  status?: T;
+  assignedTo?: T;
+  priority?: T;
+  notes?: T;
+  followUpDate?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
