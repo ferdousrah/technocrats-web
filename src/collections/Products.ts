@@ -40,21 +40,9 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'category',
-      type: 'select',
+      type: 'relationship',
+      relationTo: 'product-categories',
       required: true,
-      options: [
-        { label: 'Human Resource Management (HRM)', value: 'hrm' },
-        { label: 'Accounting & Finance', value: 'accounting' },
-        { label: 'Customer Relationship Management (CRM)', value: 'crm' },
-        { label: 'Enterprise Resource Planning (ERP)', value: 'erp' },
-        { label: 'Project Management', value: 'project-management' },
-        { label: 'Inventory Management', value: 'inventory' },
-        { label: 'Point of Sale (POS)', value: 'pos' },
-        { label: 'E-commerce Platform', value: 'ecommerce-platform' },
-        { label: 'Learning Management System (LMS)', value: 'lms' },
-        { label: 'Business Intelligence', value: 'business-intelligence' },
-        { label: 'Other', value: 'other' },
-      ],
       admin: {
         description: 'Product category',
       },

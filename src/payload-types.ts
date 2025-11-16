@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     'service-types': ServiceType;
     services: Service;
+    'product-categories': ProductCategory;
     products: Product;
     projects: Project;
     'team-members': TeamMember;
@@ -88,6 +89,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     'service-types': ServiceTypesSelect<false> | ServiceTypesSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
@@ -428,6 +430,40 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: number;
+  /**
+   * e.g., Human Resource Management (HRM), Accounting & Finance, etc.
+   */
+  name: string;
+  /**
+   * Auto-generated from name. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Brief description of this product category
+   */
+  description?: string | null;
+  /**
+   * Icon or image representing this product category
+   */
+  icon?: (number | null) | Media;
+  /**
+   * Hex color code for UI theming (e.g., #4CAF50)
+   */
+  color?: string | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
 export interface Product {
@@ -443,18 +479,7 @@ export interface Product {
   /**
    * Product category
    */
-  category:
-    | 'hrm'
-    | 'accounting'
-    | 'crm'
-    | 'erp'
-    | 'project-management'
-    | 'inventory'
-    | 'pos'
-    | 'ecommerce-platform'
-    | 'lms'
-    | 'business-intelligence'
-    | 'other';
+  category: number | ProductCategory;
   /**
    * Short catchy tagline (e.g., "Simplify Your HR Operations")
    */
@@ -1398,6 +1423,10 @@ export interface PayloadLockedDocument {
         value: number | Service;
       } | null)
     | ({
+        relationTo: 'product-categories';
+        value: number | ProductCategory;
+      } | null)
+    | ({
         relationTo: 'products';
         value: number | Product;
       } | null)
@@ -1627,6 +1656,21 @@ export interface ServicesSelect<T extends boolean = true> {
         schemaType?: T;
         customSchema?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  icon?: T;
+  color?: T;
+  order?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
