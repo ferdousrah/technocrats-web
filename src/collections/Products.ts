@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { isEditor, isPublic } from '../access'
-import { seoFields, jsonLdFields } from '../fields/seo'
+import { getSeoFields, jsonLdFields } from '../fields/seo'
+import { formatSlug } from '../hooks/slugify'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -27,10 +28,14 @@ export const Products: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
+      required: false,
       unique: true,
+      hooks: {
+        beforeValidate: [formatSlug('name')],
+      },
       admin: {
-        description: 'URL-friendly version of the product name',
+        description: 'Auto-generated from product name. You can customize it if needed.',
+        position: 'sidebar',
       },
     },
     {
@@ -473,7 +478,7 @@ export const Products: CollectionConfig = {
         { label: 'Retired', value: 'retired' },
       ],
     },
-    ...seoFields,
+    ...getSeoFields('products'),
     ...jsonLdFields,
   ],
 }

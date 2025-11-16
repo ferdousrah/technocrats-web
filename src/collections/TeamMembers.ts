@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isEditor, isPublic } from '../access'
-import { seoFields, jsonLdFields } from '../fields/seo'
+import { getSeoFields, jsonLdFields } from '../fields/seo'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
@@ -172,7 +172,7 @@ export const TeamMembers: CollectionConfig = {
         { label: 'Inactive', value: 'inactive' },
       ],
     },
-    ...seoFields,
+    ...getSeoFields('team-members'),
     ...jsonLdFields,
   ],
 }
