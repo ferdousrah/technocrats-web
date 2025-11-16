@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { isEditor, isPublic } from '../access'
+import { seoFields, jsonLdFields } from '../fields/seo'
 
 export const TeamMembers: CollectionConfig = {
   slug: 'team-members',
@@ -7,7 +9,10 @@ export const TeamMembers: CollectionConfig = {
     defaultColumns: ['name', 'position', 'department', 'status'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isEditor,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {
@@ -167,5 +172,7 @@ export const TeamMembers: CollectionConfig = {
         { label: 'Inactive', value: 'inactive' },
       ],
     },
+    ...seoFields,
+    ...jsonLdFields,
   ],
 }

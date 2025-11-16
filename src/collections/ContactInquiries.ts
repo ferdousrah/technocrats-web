@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isAuthenticated, isEditor } from '../access'
 
 export const ContactInquiries: CollectionConfig = {
   slug: 'contact-inquiries',
@@ -7,11 +8,10 @@ export const ContactInquiries: CollectionConfig = {
     defaultColumns: ['name', 'email', 'serviceInterest', 'status', 'createdAt'],
   },
   access: {
-    // Only authenticated users can read/manage inquiries
-    read: ({ req: { user } }) => !!user,
+    read: isAuthenticated, // Only authenticated users can read/manage inquiries
     create: () => true, // Allow public to create inquiries
-    update: ({ req: { user } }) => !!user,
-    delete: ({ req: { user } }) => !!user,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {

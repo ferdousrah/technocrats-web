@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { isEditor, isPublic } from '../access'
+import { seoFields, jsonLdFields } from '../fields/seo'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -7,7 +9,10 @@ export const Products: CollectionConfig = {
     defaultColumns: ['name', 'category', 'version', 'featured', 'status'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isEditor,
+    update: isEditor,
+    delete: isEditor,
   },
   fields: [
     {
@@ -440,28 +445,6 @@ export const Products: CollectionConfig = {
       },
     },
     {
-      name: 'seo',
-      type: 'group',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-          required: false,
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-          required: false,
-          maxLength: 160,
-        },
-        {
-          name: 'keywords',
-          type: 'text',
-          required: false,
-        },
-      ],
-    },
-    {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,
@@ -490,5 +473,7 @@ export const Products: CollectionConfig = {
         { label: 'Retired', value: 'retired' },
       ],
     },
+    ...seoFields,
+    ...jsonLdFields,
   ],
 }

@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { isAuthorOrAdmin, isPublic } from '../access'
+import { seoFields, jsonLdFields } from '../fields/seo'
 
 export const Blog: CollectionConfig = {
   slug: 'blog',
@@ -7,7 +9,10 @@ export const Blog: CollectionConfig = {
     defaultColumns: ['title', 'author', 'category', 'status', 'publishedDate'],
   },
   access: {
-    read: () => true,
+    read: isPublic,
+    create: isAuthorOrAdmin('author'),
+    update: isAuthorOrAdmin('author'),
+    delete: isAuthorOrAdmin('author'),
   },
   fields: [
     {
@@ -115,37 +120,6 @@ export const Blog: CollectionConfig = {
       },
     },
     {
-      name: 'seo',
-      type: 'group',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-          required: false,
-          admin: {
-            description: 'SEO title (defaults to article title if empty)',
-          },
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-          required: false,
-          maxLength: 160,
-          admin: {
-            description: 'SEO meta description (max 160 characters)',
-          },
-        },
-        {
-          name: 'keywords',
-          type: 'text',
-          required: false,
-          admin: {
-            description: 'SEO keywords (comma-separated)',
-          },
-        },
-      ],
-    },
-    {
       name: 'readTime',
       type: 'number',
       required: false,
@@ -179,5 +153,7 @@ export const Blog: CollectionConfig = {
         { label: 'Published', value: 'published' },
       ],
     },
+    ...seoFields,
+    ...jsonLdFields,
   ],
 }
