@@ -257,9 +257,9 @@ export interface ServiceType {
    */
   name: string;
   /**
-   * URL-friendly identifier (e.g., ai-ml, web-dev)
+   * Auto-generated from name. You can customize it if needed.
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Brief description of this service type
    */
@@ -288,9 +288,9 @@ export interface Service {
   id: number;
   title: string;
   /**
-   * URL-friendly version of the title
+   * Auto-generated from title. You can customize it if needed.
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Primary service type/category
    */
@@ -381,7 +381,7 @@ export interface Service {
      */
     ogDescription?: string | null;
     /**
-     * Canonical URL for duplicate content management
+     * Auto-generated from slug. Customize if needed for duplicate content management.
      */
     canonicalUrl?: string | null;
     /**
@@ -437,9 +437,9 @@ export interface Product {
    */
   name: string;
   /**
-   * URL-friendly version of the product name
+   * Auto-generated from product name. You can customize it if needed.
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Product category
    */
@@ -706,7 +706,7 @@ export interface Product {
      */
     ogDescription?: string | null;
     /**
-     * Canonical URL for duplicate content management
+     * Auto-generated from slug. Customize if needed for duplicate content management.
      */
     canonicalUrl?: string | null;
     /**
@@ -759,9 +759,9 @@ export interface Project {
   id: number;
   title: string;
   /**
-   * URL-friendly version of the title
+   * Auto-generated from title. You can customize it if needed.
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Client or company name
    */
@@ -880,7 +880,7 @@ export interface Project {
      */
     ogDescription?: string | null;
     /**
-     * Canonical URL for duplicate content management
+     * Auto-generated from slug. Customize if needed for duplicate content management.
      */
     canonicalUrl?: string | null;
     /**
@@ -1034,7 +1034,7 @@ export interface TeamMember {
      */
     ogDescription?: string | null;
     /**
-     * Canonical URL for duplicate content management
+     * Auto-generated from slug. Customize if needed for duplicate content management.
      */
     canonicalUrl?: string | null;
     /**
@@ -1142,9 +1142,9 @@ export interface Blog {
   id: number;
   title: string;
   /**
-   * URL-friendly version of the title
+   * Auto-generated from title. You can customize it if needed.
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Article author
    */
@@ -1244,7 +1244,7 @@ export interface Blog {
      */
     ogDescription?: string | null;
     /**
-     * Canonical URL for duplicate content management
+     * Auto-generated from slug. Customize if needed for duplicate content management.
      */
     canonicalUrl?: string | null;
     /**

@@ -1,6 +1,11 @@
 import type { Field } from 'payload'
+import { formatCanonicalUrl } from '../hooks/slugify'
 
-export const seoFields: Field[] = [
+/**
+ * Generate SEO fields with auto-generated canonical URL
+ * @param collectionSlug - The collection slug for canonical URL generation
+ */
+export const getSeoFields = (collectionSlug: string): Field[] => [
   {
     name: 'seo',
     type: 'group',
@@ -63,8 +68,12 @@ export const seoFields: Field[] = [
         name: 'canonicalUrl',
         type: 'text',
         required: false,
+        hooks: {
+          beforeValidate: [formatCanonicalUrl(collectionSlug)],
+        },
         admin: {
-          description: 'Canonical URL for duplicate content management',
+          description: 'Auto-generated from slug. Customize if needed for duplicate content management.',
+          position: 'sidebar',
         },
       },
       {
@@ -86,6 +95,9 @@ export const seoFields: Field[] = [
     ],
   },
 ]
+
+// Legacy export for backward compatibility (without canonical URL auto-generation)
+export const seoFields: Field[] = getSeoFields('')
 
 export const jsonLdFields: Field[] = [
   {

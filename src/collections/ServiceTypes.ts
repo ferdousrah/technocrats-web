@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { isEditor, isPublic } from '../access'
+import { formatSlug } from '../hooks/slugify'
 
 export const ServiceTypes: CollectionConfig = {
   slug: 'service-types',
@@ -26,10 +27,14 @@ export const ServiceTypes: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
+      required: false,
       unique: true,
+      hooks: {
+        beforeValidate: [formatSlug('name')],
+      },
       admin: {
-        description: 'URL-friendly identifier (e.g., ai-ml, web-dev)',
+        description: 'Auto-generated from name. You can customize it if needed.',
+        position: 'sidebar',
       },
     },
     {
