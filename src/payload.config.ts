@@ -15,6 +15,8 @@ import { Products } from './collections/Products'
 import { Projects } from './collections/Projects'
 import { TeamMembers } from './collections/TeamMembers'
 import { Testimonials } from './collections/Testimonials'
+import { BlogCategories } from './collections/BlogCategories'
+import { BlogTags } from './collections/BlogTags'
 import { Blog } from './collections/Blog'
 import { ContactInquiries } from './collections/ContactInquiries'
 
@@ -38,6 +40,8 @@ export default buildConfig({
     Projects,
     TeamMembers,
     Testimonials,
+    BlogCategories,
+    BlogTags,
     Blog,
     ContactInquiries,
   ],
