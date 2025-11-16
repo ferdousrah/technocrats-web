@@ -29,6 +29,24 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      // Custom Views
+      views: {
+        dashboard: {
+          Component: './components/admin/dashboard/CustomDashboard',
+          path: '/',
+          exact: true,
+        },
+        analytics: {
+          Component: './components/admin/views/AnalyticsView',
+          path: '/analytics',
+          exact: true,
+        },
+      },
+    },
+    meta: {
+      titleSuffix: '- Tech Company Admin',
+    },
   },
   collections: [
     Users,
