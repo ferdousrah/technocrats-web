@@ -18,6 +18,12 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^6.5.0",
+    "@mui/material": "^6.5.0",
+    "@mui/system": "^7.3.5",
+    "@payloadcms/db-postgres": "3.64.0",
     "@payloadcms/next": "3.64.0",
     "@payloadcms/richtext-lexical": "3.64.0",
     "@payloadcms/ui": "3.64.0",
@@ -28,8 +34,8 @@
     "payload": "3.64.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "sharp": "0.34.2",
-    "@payloadcms/db-postgres": "3.64.0"
+    "recharts": "^3.4.1",
+    "sharp": "0.34.2"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1",
