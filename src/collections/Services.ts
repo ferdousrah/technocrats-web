@@ -4,7 +4,7 @@ export const Services: CollectionConfig = {
   slug: 'services',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'category', 'featured', 'status'],
+    defaultColumns: ['title', 'serviceType', 'featured', 'status'],
   },
   access: {
     read: () => true,
@@ -26,20 +26,12 @@ export const Services: CollectionConfig = {
       },
     },
     {
-      name: 'category',
-      type: 'select',
+      name: 'serviceType',
+      type: 'relationship',
+      relationTo: 'service-types',
       required: true,
-      options: [
-        { label: 'AI & ML Development', value: 'ai-ml' },
-        { label: 'AI Agent Development', value: 'ai-agent' },
-        { label: 'Business Automation', value: 'automation' },
-        { label: 'Website Development', value: 'web-dev' },
-        { label: 'E-commerce Development', value: 'ecommerce' },
-        { label: 'Mobile App Development', value: 'mobile' },
-        { label: 'Custom Software Development', value: 'custom-software' },
-      ],
       admin: {
-        description: 'Primary service category',
+        description: 'Primary service type/category',
       },
     },
     {

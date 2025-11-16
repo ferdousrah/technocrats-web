@@ -69,7 +69,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'service-types': ServiceType;
     services: Service;
+    products: Product;
     projects: Project;
     'team-members': TeamMember;
     testimonials: Testimonial;
@@ -84,7 +86,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'service-types': ServiceTypesSelect<false> | ServiceTypesSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
@@ -172,6 +176,40 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-types".
+ */
+export interface ServiceType {
+  id: number;
+  /**
+   * e.g., AI & ML Development, Web Development, etc.
+   */
+  name: string;
+  /**
+   * URL-friendly identifier (e.g., ai-ml, web-dev)
+   */
+  slug: string;
+  /**
+   * Brief description of this service type
+   */
+  description?: string | null;
+  /**
+   * Icon or image representing this service type
+   */
+  icon?: (number | null) | Media;
+  /**
+   * Hex color code for UI theming (e.g., #FF6B6B)
+   */
+  color?: string | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
@@ -182,9 +220,9 @@ export interface Service {
    */
   slug: string;
   /**
-   * Primary service category
+   * Primary service type/category
    */
-  category: 'ai-ml' | 'ai-agent' | 'automation' | 'web-dev' | 'ecommerce' | 'mobile' | 'custom-software';
+  serviceType: number | ServiceType;
   /**
    * Brief description (max 200 characters) for cards and previews
    */
@@ -245,6 +283,268 @@ export interface Service {
    */
   order?: number | null;
   status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  /**
+   * e.g., HRM System, Accounting Software, etc.
+   */
+  name: string;
+  /**
+   * URL-friendly version of the product name
+   */
+  slug: string;
+  /**
+   * Product category
+   */
+  category:
+    | 'hrm'
+    | 'accounting'
+    | 'crm'
+    | 'erp'
+    | 'project-management'
+    | 'inventory'
+    | 'pos'
+    | 'ecommerce-platform'
+    | 'lms'
+    | 'business-intelligence'
+    | 'other';
+  /**
+   * Short catchy tagline (e.g., "Simplify Your HR Operations")
+   */
+  tagline?: string | null;
+  /**
+   * Brief description for cards and previews (max 200 characters)
+   */
+  shortDescription: string;
+  /**
+   * Detailed product description with formatting
+   */
+  fullDescription: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Product logo
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Main product image or screenshot
+   */
+  featuredImage?: (number | null) | Media;
+  /**
+   * Product screenshots and images
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Key features and capabilities
+   */
+  features?:
+    | {
+        title: string;
+        description?: string | null;
+        icon?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Product modules or components
+   */
+  modules?:
+    | {
+        /**
+         * Module name (e.g., Payroll, Attendance, Leave Management)
+         */
+        name: string;
+        description?: string | null;
+        /**
+         * Included in base package
+         */
+        included?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technologies used to build this product
+   */
+  technologies?:
+    | {
+        technology: string;
+        id?: string | null;
+      }[]
+    | null;
+  pricing?: {
+    plans?:
+      | {
+          /**
+           * Plan name (e.g., Basic, Professional, Enterprise)
+           */
+          name: string;
+          /**
+           * Price amount
+           */
+          price: number;
+          /**
+           * Currency code (e.g., USD, EUR, BDT)
+           */
+          currency?: string | null;
+          billingPeriod?: ('monthly' | 'yearly' | 'one-time' | 'custom') | null;
+          features?:
+            | {
+                feature: string;
+                id?: string | null;
+              }[]
+            | null;
+          /**
+           * Mark as most popular plan
+           */
+          popular?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Offer custom pricing for enterprises
+     */
+    customPricingAvailable?: boolean | null;
+    freeTrial?: {
+      available?: boolean | null;
+      /**
+       * Trial duration in days
+       */
+      duration?: number | null;
+    };
+  };
+  /**
+   * Key benefits for customers
+   */
+  benefits?:
+    | {
+        benefit: string;
+        id?: string | null;
+      }[]
+    | null;
+  targetAudience?:
+    | {
+        /**
+         * e.g., Small Businesses, Enterprises, Startups
+         */
+        audience: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Third-party integrations supported
+   */
+  integrations?:
+    | {
+        name: string;
+        logo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  demo?: {
+    /**
+     * Demo available
+     */
+    available?: boolean | null;
+    /**
+     * Demo URL
+     */
+    url?: string | null;
+    /**
+     * Demo video URL (YouTube, Vimeo, etc.)
+     */
+    videoUrl?: string | null;
+  };
+  documentation?: {
+    /**
+     * Documentation URL
+     */
+    url?: string | null;
+    /**
+     * User guide PDF
+     */
+    userGuide?: (number | null) | Media;
+  };
+  support?: {
+    email?: string | null;
+    phone?: string | null;
+    /**
+     * Support hours (e.g., 24/7, 9 AM - 5 PM)
+     */
+    hours?: string | null;
+  };
+  /**
+   * Current product version
+   */
+  version?: string | null;
+  /**
+   * Product release or launch date
+   */
+  releaseDate?: string | null;
+  /**
+   * Last update date
+   */
+  lastUpdate?: string | null;
+  /**
+   * Version history and changes
+   */
+  changelog?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Projects using this product
+   */
+  relatedProjects?: (number | Project)[] | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    keywords?: string | null;
+  };
+  /**
+   * Feature this product on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'draft' | 'published' | 'coming-soon' | 'retired';
   updatedAt: string;
   createdAt: string;
 }
@@ -697,8 +997,16 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
+        relationTo: 'service-types';
+        value: number | ServiceType;
+      } | null)
+    | ({
         relationTo: 'services';
         value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
       } | null)
     | ({
         relationTo: 'projects';
@@ -804,12 +1112,27 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-types_select".
+ */
+export interface ServiceTypesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  icon?: T;
+  color?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  category?: T;
+  serviceType?: T;
   shortDescription?: T;
   fullDescription?: T;
   icon?: T;
@@ -830,6 +1153,132 @@ export interface ServicesSelect<T extends boolean = true> {
     | {
         startingPrice?: T;
         pricingModel?: T;
+      };
+  featured?: T;
+  order?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  category?: T;
+  tagline?: T;
+  shortDescription?: T;
+  fullDescription?: T;
+  logo?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        icon?: T;
+        id?: T;
+      };
+  modules?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        included?: T;
+        id?: T;
+      };
+  technologies?:
+    | T
+    | {
+        technology?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        plans?:
+          | T
+          | {
+              name?: T;
+              price?: T;
+              currency?: T;
+              billingPeriod?: T;
+              features?:
+                | T
+                | {
+                    feature?: T;
+                    id?: T;
+                  };
+              popular?: T;
+              id?: T;
+            };
+        customPricingAvailable?: T;
+        freeTrial?:
+          | T
+          | {
+              available?: T;
+              duration?: T;
+            };
+      };
+  benefits?:
+    | T
+    | {
+        benefit?: T;
+        id?: T;
+      };
+  targetAudience?:
+    | T
+    | {
+        audience?: T;
+        id?: T;
+      };
+  integrations?:
+    | T
+    | {
+        name?: T;
+        logo?: T;
+        id?: T;
+      };
+  demo?:
+    | T
+    | {
+        available?: T;
+        url?: T;
+        videoUrl?: T;
+      };
+  documentation?:
+    | T
+    | {
+        url?: T;
+        userGuide?: T;
+      };
+  support?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        hours?: T;
+      };
+  version?: T;
+  releaseDate?: T;
+  lastUpdate?: T;
+  changelog?: T;
+  relatedProjects?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?: T;
       };
   featured?: T;
   order?: T;

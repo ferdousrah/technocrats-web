@@ -8,7 +8,9 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
+import { ServiceTypes } from './collections/ServiceTypes'
 import { Services } from './collections/Services'
+import { Products } from './collections/Products'
 import { Projects } from './collections/Projects'
 import { TeamMembers } from './collections/TeamMembers'
 import { Testimonials } from './collections/Testimonials'
@@ -28,7 +30,9 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    ServiceTypes,
     Services,
+    Products,
     Projects,
     TeamMembers,
     Testimonials,
