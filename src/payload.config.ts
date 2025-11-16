@@ -10,6 +10,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { ServiceTypes } from './collections/ServiceTypes'
 import { Services } from './collections/Services'
+import { ProductCategories } from './collections/ProductCategories'
 import { Products } from './collections/Products'
 import { Projects } from './collections/Projects'
 import { TeamMembers } from './collections/TeamMembers'
@@ -32,6 +33,7 @@ export default buildConfig({
     Media,
     ServiceTypes,
     Services,
+    ProductCategories,
     Products,
     Projects,
     TeamMembers,
