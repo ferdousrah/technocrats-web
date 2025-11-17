@@ -31,6 +31,7 @@ export default buildConfig({
     },
     // Custom admin components with MUI theme provider for style isolation
     components: {
+      Nav: './components/admin/navigation/CustomNav',
       views: {
         dashboard: {
           Component: './components/admin/dashboard/CustomDashboard',
