@@ -35,6 +35,7 @@ import { BlogTagsList as BlogTagsList_8f1d439cc289adf81730f9ebcc76c419 } from '.
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_61264ab934251a15e8ca2cc8f66bc206 } from '../../../components/admin/collections/BlogList'
 import { default as default_c23758562428c44820702092add4b596 } from '../../../components/admin/collections/ContactInquiriesList'
+import { default as default_e2a8c24e34af84a7cd091b259cdb0e41 } from '../../../components/admin/navigation/CustomNav'
 import { default as default_f1a01e3ffbf6b019e40d01928db2823f } from '../../../components/admin/dashboard/CustomDashboard'
 import { default as default_9d80edae6c0796073a05eaf3a6882039 } from '../../../components/admin/views/AnalyticsView'
 
@@ -76,6 +77,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "./components/admin/collections/BlogList#default": default_61264ab934251a15e8ca2cc8f66bc206,
   "./components/admin/collections/ContactInquiriesList#default": default_c23758562428c44820702092add4b596,
+  "./components/admin/navigation/CustomNav#default": default_e2a8c24e34af84a7cd091b259cdb0e41,
   "./components/admin/dashboard/CustomDashboard#default": default_f1a01e3ffbf6b019e40d01928db2823f,
   "./components/admin/views/AnalyticsView#default": default_9d80edae6c0796073a05eaf3a6882039
 }
