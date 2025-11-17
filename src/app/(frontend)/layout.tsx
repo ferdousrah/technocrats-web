@@ -1,19 +1,35 @@
-import React from 'react'
-import './styles.css'
+import ClientLayout from '@/components/frontend/layout/ClientLayout'
+import type { Metadata } from 'next'
+import Script from 'next/script'
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+export const metadata: Metadata = {
+  title: 'Technocrats - AI & ML Development Company',
+  description: 'Leading AI and ML development, AI agent development, business automation, and custom software solutions',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+const setColorSchemeScript = `
+(function() {
+  try {
+    var scheme = localStorage.getItem('color-scheme') || 'light';
+    document.documentElement.setAttribute('color-scheme', scheme);
+  } catch(e) {}
+})();
+`
 
+export default function FrontendLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
-      </body>
-    </html>
+    <>
+      <link rel="stylesheet" href="/css/styles.css" />
+      <Script
+        id="color-scheme"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: setColorSchemeScript }}
+      />
+      <ClientLayout>{children}</ClientLayout>
+    </>
   )
 }
