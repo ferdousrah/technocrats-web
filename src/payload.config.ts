@@ -19,6 +19,7 @@ import { BlogCategories } from './collections/BlogCategories'
 import { BlogTags } from './collections/BlogTags'
 import { Blog } from './collections/Blog'
 import { ContactInquiries } from './collections/ContactInquiries'
+import { Menus } from './collections/Menus'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,6 +53,7 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    Menus,
     ServiceTypes,
     Services,
     ProductCategories,
