@@ -2,12 +2,12 @@
 import { type ContactForm, contactSchema } from "@/schemas/contact";
 import { useForm as useHookForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "@formspree/react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AnimatedButton from "@/components/frontend/animation/AnimatedButton";
+import { submitContactForm } from "@/lib/api";
 
-export default function ContactForm() {
+export default function ContactFormComponent() {
   const {
     register,
     handleSubmit,
@@ -17,15 +17,21 @@ export default function ContactForm() {
     resolver: zodResolver(contactSchema),
   });
 
-  // Formspree submit hook
-  const [fsState, fsSubmit] = useForm<ContactForm>("meoljlry");
-
   const onSubmit = async (data: ContactForm) => {
     try {
-      await fsSubmit(data); // submit to Formspree
+      // Submit to PayloadCMS ContactInquiries collection
+      await submitContactForm({
+        name: data.Name,
+        email: data["E-mail"],
+        phone: data.Phone,
+        company: data.Company,
+        message: data.Message,
+      });
+
       reset(); // reset form fields
-      toast.success("Message sent — thanks!");
-    } catch {
+      toast.success("Message sent — thanks! We'll get back to you soon.");
+    } catch (error) {
+      console.error("Form submission error:", error);
       toast.error("Submission failed — please try again later.");
     }
   };
@@ -57,22 +63,6 @@ export default function ContactForm() {
                           id="contact-form"
                           onSubmit={handleSubmit(onSubmit)}
                         >
-                          {/* Hidden Required Fields */}
-                          <input
-                            type="hidden"
-                            name="project_name"
-                            defaultValue="Rayo Template"
-                          />
-                          <input
-                            type="hidden"
-                            name="admin_email"
-                            defaultValue="support@mixdesign.dev"
-                          />
-                          <input
-                            type="hidden"
-                            name="form_subject"
-                            defaultValue="Contact Form Message"
-                          />
                           {/* Visible Fields */}
                           <div className="container-fluid p-0">
                             <div className="row gx-0">
@@ -132,7 +122,7 @@ export default function ContactForm() {
                                   as={"button"}
                                   className="btn btn-anim btn-default btn-large btn-opposite slide-right-up"
                                   type="submit"
-                                  disabled={isSubmitting || fsState.submitting}
+                                  disabled={isSubmitting}
                                 >
                                   <i className="ph-bold ph-arrow-up-right" />
                                 </AnimatedButton>

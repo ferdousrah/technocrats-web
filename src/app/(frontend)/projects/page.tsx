@@ -1,63 +1,60 @@
 import Link from "next/link";
-import { getLatestProjects } from "@/lib/api";
+import { fetchDocs } from "@/lib/api";
 import { Project, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
 import BackgroundParallax from "@/components/frontend/animation/BackgroundParallax";
-import AnimatedButton from "@/components/frontend/animation/AnimatedButton";
 
-export default async function Projects() {
-  const projects = await getLatestProjects<Project>(5);
+export const metadata = {
+  title: "Projects - Technocrats",
+  description: "Explore our portfolio of successful AI, ML, and software development projects",
+};
+
+// Dynamic page generation - pages are generated on-demand
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  const { docs: projects } = await fetchDocs<Project>("projects", {
+    limit: 50,
+    sort: "-createdAt",
+    depth: 2,
+  });
 
   return (
-    <div className="mxd-section padding-pre-grid mobile-grid-title">
+    <div className="mxd-section padding-default">
       <div className="mxd-container grid-container">
-        {/* Block - Projects Pinned #01 with Section Title Start */}
+        {/* Section Title */}
+        <div className="mxd-block">
+          <div className="mxd-section-title pre-grid">
+            <div className="container-fluid p-0">
+              <div className="row g-0">
+                <div className="col-12 col-xl-6 mxd-grid-item no-margin">
+                  <div className="mxd-section-title__hrtitle">
+                    <RevealText as="h1" className="reveal-type">
+                      Our Projects
+                    </RevealText>
+                  </div>
+                </div>
+                <div className="col-12 col-xl-6 mxd-grid-item no-margin">
+                  <div className="mxd-section-title__hrdescr">
+                    <p className="anim-uni-in-up">
+                      Discover our innovative solutions across AI, ML, and
+                      custom software development
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Projects Grid */}
         <div className="mxd-block">
           <div className="mxd-pinned-projects">
             <div className="container-fluid px-0">
               <div className="row gx-0">
-                <div className="col-12 col-xl-5 mxd-pinned-projects__static">
-                  <div className="mxd-pinned-projects__static-inner no-margin">
-                    {/* Section Title Start */}
-                    <div className="mxd-section-title no-margin-desktop">
-                      <div className="container-fluid p-0">
-                        <div className="row g-0">
-                          <div className="col-12 mxd-grid-item no-margin">
-                            <div className="mxd-section-title__title">
-                              <RevealText as="h2" className="reveal-type">
-                                Case studies
-                              </RevealText>
-                            </div>
-                          </div>
-                          <div className="col-12 mxd-grid-item no-margin">
-                            <div className="mxd-section-title__descr">
-                              <p className="anim-uni-in-up">
-                                Explore a selection of projects blending
-                                <br />
-                                creativity with practical design
-                              </p>
-                            </div>
-                          </div>
-                          <div className="col-12 mxd-grid-item no-margin">
-                            <div className="mxd-section-title__controls anim-uni-in-up">
-                              <AnimatedButton
-                                text="All Works"
-                                className="btn btn-anim btn-default btn-outline slide-right-up"
-                                href={`/projects`}
-                              >
-                                <i className="ph-bold ph-arrow-up-right" />
-                              </AnimatedButton>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* Section Title Start */}
-                  </div>
-                </div>
-                <div className="col-12 col-xl-7 mxd-pinned-projects__scroll">
+                <div className="col-12">
                   <div className="mxd-pinned-projects__scroll-inner mxd-grid-item no-margin">
-                    {projects.map((project, index) => {
+                    {projects.map((project) => {
                       const featuredImage =
                         typeof project.featuredImage === "object"
                           ? (project.featuredImage as Media)?.url
@@ -74,6 +71,8 @@ export default async function Projects() {
                                 className="mxd-project-item__preview parallax-img-small"
                                 style={{
                                   backgroundImage: `url(${featuredImage})`,
+                                  backgroundSize: "cover",
+                                  backgroundPosition: "center",
                                 }}
                               />
                             ) : (
@@ -101,9 +100,17 @@ export default async function Projects() {
                                 className="anim-img-scale-in"
                                 href={`/projects/${project.slug}`}
                               >
-                                <span>{project.title}</span> {project.description}
+                                <span>{project.title}</span>{" "}
+                                {project.description}
                               </Link>
                             </div>
+                            {project.client && (
+                              <div className="mxd-project-item__client">
+                                <span className="t-small">
+                                  Client: {project.client}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -114,7 +121,6 @@ export default async function Projects() {
             </div>
           </div>
         </div>
-        {/* Block - Projects Pinned #01 with Section Title Start */}
       </div>
     </div>
   );

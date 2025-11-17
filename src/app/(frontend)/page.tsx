@@ -14,6 +14,9 @@ import Blogs from '@/components/frontend/common/Blogs'
 import Cta from '@/components/frontend/common/Cta'
 import Footer2 from '@/components/frontend/footers/Footer2'
 
+// Dynamic page generation - pages are generated on-demand
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   return (
     <>

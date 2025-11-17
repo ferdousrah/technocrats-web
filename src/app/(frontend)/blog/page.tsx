@@ -1,65 +1,74 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getFeaturedBlogPosts } from "@/lib/api";
+import { fetchDocs } from "@/lib/api";
 import { BlogPost, Media } from "@/types/payload";
-import RevealText from "../animation/RevealText";
-import BackgroundParallax from "../animation/BackgroundParallax";
-import AnimatedButton from "../animation/AnimatedButton";
+import RevealText from "@/components/frontend/animation/RevealText";
+import BackgroundParallax from "@/components/frontend/animation/BackgroundParallax";
 
-const defaultDesc = `Inspiring ideas, creative insights, and the latest in design and tech. Fueling innovation for your digital journey.`;
+export const metadata = {
+  title: "Blog - Technocrats",
+  description: "Latest insights, articles, and news from Technocrats",
+};
 
-export default async function Blogs({
-  title = "Recent insights",
-  desc = defaultDesc,
-}) {
-  const blogs = await getFeaturedBlogPosts<BlogPost>(3);
+// Dynamic page generation - pages are generated on-demand
+export const dynamic = "force-dynamic";
+
+export default async function BlogPage() {
+  const { docs: blogs } = await fetchDocs<BlogPost>("blog", {
+    limit: 12,
+    sort: "-publishedDate",
+    where: {
+      status: { equals: "published" },
+    },
+    depth: 2,
+  });
 
   return (
-    <div className="mxd-section padding-blog">
+    <div className="mxd-section padding-default">
       <div className="mxd-container grid-container">
-        {/* Block - Section Title Start */}
+        {/* Section Title */}
         <div className="mxd-block">
           <div className="mxd-section-title pre-grid">
             <div className="container-fluid p-0">
               <div className="row g-0">
-                <div className="col-12 col-xl-5 mxd-grid-item no-margin">
+                <div className="col-12 col-xl-6 mxd-grid-item no-margin">
                   <div className="mxd-section-title__hrtitle">
-                    <RevealText as="h2" className="reveal-type anim-uni-in-up">
-                      {title}
+                    <RevealText as="h1" className="reveal-type">
+                      Blog & Insights
                     </RevealText>
                   </div>
                 </div>
-                <div className="col-12 col-xl-4 mxd-grid-item no-margin">
+                <div className="col-12 col-xl-6 mxd-grid-item no-margin">
                   <div className="mxd-section-title__hrdescr">
-                    <p className="anim-uni-in-up">{desc}</p>
-                  </div>
-                </div>
-                <div className="col-12 col-xl-3 mxd-grid-item no-margin">
-                  <div className="mxd-section-title__hrcontrols anim-uni-in-up">
-                    <AnimatedButton
-                      text="All Articles"
-                      className="btn btn-anim btn-default btn-outline slide-right-up"
-                      href={`/blog`}
-                    >
-                      <i className="ph-bold ph-arrow-up-right" />
-                    </AnimatedButton>
+                    <p className="anim-uni-in-up">
+                      Explore our latest articles on AI, ML, software
+                      development, and technology trends
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/* Block - Section Title End */}
-        {/* Block - Blog Preview Cards Start */}
+
+        {/* Blog Grid */}
         <div className="mxd-block">
           <div className="mxd-blog-preview">
             <div className="container-fluid p-0">
               <div className="row g-0">
-                {blogs.map((blog, idx) => {
+                {blogs.map((blog) => {
                   const featuredImage =
                     typeof blog.featuredImage === "object"
                       ? (blog.featuredImage as Media)?.url
                       : blog.featuredImage;
+
+                  const publishDate = blog.publishedDate
+                    ? new Date(blog.publishedDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : "";
 
                   return (
                     <div
@@ -107,12 +116,22 @@ export default async function Blogs({
                       </Link>
 
                       <div className="mxd-blog-preview__data">
+                        {publishDate && (
+                          <div className="mxd-blog-preview__meta">
+                            <span className="meta-date">{publishDate}</span>
+                          </div>
+                        )}
                         <Link
                           className="anim-uni-in-up"
                           href={`/blog/${blog.slug}`}
                         >
                           {blog.title}
                         </Link>
+                        {blog.excerpt && (
+                          <p className="mxd-blog-preview__excerpt">
+                            {blog.excerpt}
+                          </p>
+                        )}
                       </div>
                     </div>
                   );
@@ -121,7 +140,6 @@ export default async function Blogs({
             </div>
           </div>
         </div>
-        {/* Block - Blog Preview Cards End */}
       </div>
     </div>
   );
