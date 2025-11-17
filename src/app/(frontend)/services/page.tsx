@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getAllServices } from "@/lib/api";
 import { Service, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
+import Footer2 from "@/components/frontend/footers/Footer2";
 
 export const metadata = {
   title: "Services - Technocrats",
@@ -17,7 +18,8 @@ export default async function ServicesPage() {
   const services = await getAllServices<Service>();
 
   return (
-    <div className="mxd-section padding-default">
+    <>
+      <div className="mxd-section padding-default">
       <div className="mxd-container grid-container">
         {/* Section Title */}
         <div className="mxd-block">
@@ -104,5 +106,7 @@ export default async function ServicesPage() {
         </div>
       </div>
     </div>
+      <Footer2 />
+    </>
   );
 }

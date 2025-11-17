@@ -22,7 +22,7 @@ export default function Header1() {
     <header id="header" className={`mxd-header ${isHidden ? "is-hidden" : ""}`}>
       {/* header logo */}
       <div className="mxd-header__logo loading__fade">
-        <Link href={`/home-main`} className="mxd-logo">
+        <Link href={`/`} className="mxd-logo">
           {/* logo icon */}
           <svg
             className="mxd-logo__image"
@@ -84,34 +84,50 @@ export default function Header1() {
           </svg>
           {/* logo text */}
           <span className="mxd-logo__text">
-            rayo
+            Techno
             <br />
-            template
+            crats
           </span>
         </Link>
       </div>
+
+      {/* Main Navigation */}
+      <nav className="mxd-header__nav loading__fade">
+        <ul className="mxd-menu">
+          <li className={pathname === "/" ? "active" : ""}>
+            <Link href="/">Home</Link>
+          </li>
+          <li className={pathname === "/about" ? "active" : ""}>
+            <Link href="/about">About</Link>
+          </li>
+          <li className={pathname?.startsWith("/services") ? "active" : ""}>
+            <Link href="/services">Services</Link>
+          </li>
+          <li className={pathname?.startsWith("/projects") ? "active" : ""}>
+            <Link href="/projects">Projects</Link>
+          </li>
+          <li className={pathname?.startsWith("/blog") ? "active" : ""}>
+            <Link href="/blog">Blog</Link>
+          </li>
+          <li className={pathname === "/clients" ? "active" : ""}>
+            <Link href="/clients">Clients</Link>
+          </li>
+          <li className={pathname === "/contact" ? "active" : ""}>
+            <Link href="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
       {/* header controls */}
       <div className="mxd-header__controls loading__fade">
         <ThemeSwitcherButton />
 
-        {pathname == "/" || pathname == "/preview" ? (
-          <AnimatedButton
-            text="Purchase"
-            className="btn btn-anim btn-default btn-mobile-icon btn-outline slide-right"
-            href="https://themeforest.net/user/ib-themes/portfolio"
-            target="_blank"
-          >
-            <i className="ph-bold ph-shopping-cart-simple" />
-          </AnimatedButton>
-        ) : (
-          <AnimatedButton
-            text="Say Hello"
-            className="btn btn-anim btn-default btn-mobile-icon btn-outline slide-right"
-            href="/contact"
-          >
-            <i className="ph-bold ph-arrow-up-right" />
-          </AnimatedButton>
-        )}
+        <AnimatedButton
+          text="Get Started"
+          className="btn btn-anim btn-default btn-mobile-icon btn-outline slide-right"
+          href="/contact"
+        >
+          <i className="ph-bold ph-arrow-up-right" />
+        </AnimatedButton>
       </div>
     </header>
   );
