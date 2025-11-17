@@ -4,14 +4,14 @@ import socials from "@/data/socials.json";
 import AnimatedButton from "../animation/AnimatedButton";
 import SubscribeForm from "./SubscribeForm";
 
-export default function Footer2({ text = "rayosttudio" }: { text?: string }) {
+export default function Footer2({ text = "Technocrats" }: { text?: string }) {
   return (
     <footer id="mxd-footer" className="mxd-footer">
       {/* Footer Block - Fullwidth Text Start */}
       <div className="mxd-footer__text-wrap">
         <div className="fullwidth-text__tl-trigger" />
         <div className="mxd-footer__fullwidth-text anim-top-to-bottom">
-          {text == "rayosttudio" ? (
+          {text == "Technocrats" ? (
             <svg
               className="mxd-footer__svg-v2"
               version="1.1"
@@ -202,8 +202,8 @@ export default function Footer2({ text = "rayosttudio" }: { text?: string }) {
             c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"
                 />
               </svg>
-              <a href="mailto:example@example.com?subject=Message%20from%20your%20site">
-                hello@rayostudio.com
+              <a href="mailto:hello@technocrats.com?subject=Message%20from%20your%20site">
+                hello@technocrats.com
               </a>
             </p>
           </div>
