@@ -61,6 +61,7 @@ export default function BlogList() {
     <CollectionDataGridWithTheme
       collection="blog"
       columns={columns}
+      title="Blog Posts"
       transformRow={(doc) => ({
         id: doc.id,
         title: doc.title,

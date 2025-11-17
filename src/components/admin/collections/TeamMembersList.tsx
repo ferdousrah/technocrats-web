@@ -58,6 +58,7 @@ export default function TeamMembersList() {
     <CollectionDataGridWithTheme
       collection="team-members"
       columns={columns}
+      title="Team Members"
       transformRow={(doc) => {
         const photo = typeof doc.photo === 'object' ? doc.photo?.url : doc.photo
         return {

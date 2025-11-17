@@ -62,6 +62,7 @@ export default function ContactInquiriesList() {
     <CollectionDataGridWithTheme
       collection="contact-inquiries"
       columns={columns}
+      title="Contact Inquiries"
       transformRow={(doc) => ({
         id: doc.id,
         name: doc.name,

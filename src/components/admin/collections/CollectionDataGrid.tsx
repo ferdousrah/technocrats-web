@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Box, CircularProgress, Chip, Avatar } from '@mui/material'
+import { Box, CircularProgress, Chip, Avatar, Button, Typography } from '@mui/material'
 import { DataGrid, GridColDef, GridRowsProp, GridToolbar } from '@mui/x-data-grid'
+import AddIcon from '@mui/icons-material/Add'
 import MuiThemeProvider from '../MuiThemeProvider'
 
 interface CollectionDataGridProps {
@@ -10,6 +11,7 @@ interface CollectionDataGridProps {
   columns: GridColDef[]
   transformRow?: (doc: any) => any
   height?: number
+  title?: string
 }
 
 export function CollectionDataGrid({
@@ -17,6 +19,7 @@ export function CollectionDataGrid({
   columns,
   transformRow,
   height = 700,
+  title,
 }: CollectionDataGridProps) {
   const [loading, setLoading] = useState(true)
   const [rows, setRows] = useState<GridRowsProp>([])
@@ -53,34 +56,57 @@ export function CollectionDataGrid({
   }, [collection, paginationModel, transformRow])
 
   return (
-    <Box sx={{ height, width: '100%', p: 3 }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={loading}
-        slots={{ toolbar: GridToolbar }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[10, 25, 50, 100]}
-        rowCount={totalDocs}
-        paginationMode="server"
-        checkboxSelection
-        disableRowSelectionOnClick
-        onRowClick={(params) => {
-          window.location.href = `/admin/collections/${collection}/${params.id}`
-        }}
-        sx={{
-          '& .MuiDataGrid-row:hover': {
-            cursor: 'pointer',
-          },
-        }}
-      />
+    <Box sx={{ width: '100%', p: 3 }}>
+      {/* Header with Create Button */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        {title && (
+          <Typography variant="h5" component="h1" sx={{ fontWeight: 600 }}>
+            {title}
+          </Typography>
+        )}
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={() => {
+            window.location.href = `/admin/collections/${collection}/create`
+          }}
+          sx={{ ml: 'auto' }}
+        >
+          Create New
+        </Button>
+      </Box>
+
+      {/* DataGrid */}
+      <Box sx={{ height: height - 100 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          loading={loading}
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500 },
+            },
+          }}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[10, 25, 50, 100]}
+          rowCount={totalDocs}
+          paginationMode="server"
+          checkboxSelection
+          disableRowSelectionOnClick
+          onRowClick={(params) => {
+            window.location.href = `/admin/collections/${collection}/${params.id}`
+          }}
+          sx={{
+            '& .MuiDataGrid-row:hover': {
+              cursor: 'pointer',
+            },
+          }}
+        />
+      </Box>
     </Box>
   )
 }
