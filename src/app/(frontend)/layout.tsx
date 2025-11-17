@@ -1,6 +1,7 @@
 import ClientLayout from '@/components/frontend/layout/ClientLayout'
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import '../globals.css'
 
 export const metadata: Metadata = {
   title: 'Technocrats - AI & ML Development Company',
@@ -22,14 +23,18 @@ export default function FrontendLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
-      <link rel="stylesheet" href="/css/styles.css" />
-      <Script
-        id="color-scheme"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{ __html: setColorSchemeScript }}
-      />
-      <ClientLayout>{children}</ClientLayout>
-    </>
+    <html lang="en" suppressHydrationWarning className="no-touch">
+      <head>
+        <link rel="stylesheet" href="/css/styles.css" />
+        <Script
+          id="color-scheme"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: setColorSchemeScript }}
+        />
+      </head>
+      <body>
+        <ClientLayout>{children}</ClientLayout>
+      </body>
+    </html>
   )
 }
