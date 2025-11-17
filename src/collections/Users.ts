@@ -5,6 +5,13 @@ export const Users: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     defaultColumns: ['email', 'firstName', 'lastName', 'roles'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/UsersList',
+        },
+      },
+    },
   },
   auth: true,
   fields: [

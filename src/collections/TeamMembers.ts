@@ -7,6 +7,13 @@ export const TeamMembers: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'position', 'department', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/TeamMembersList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

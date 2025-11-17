@@ -2,6 +2,15 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  admin: {
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/MediaList',
+        },
+      },
+    },
+  },
   access: {
     read: () => true,
   },
