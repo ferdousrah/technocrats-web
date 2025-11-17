@@ -25,6 +25,7 @@ import {
   Visibility as VisibilityIcon,
 } from '@mui/icons-material'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import MuiThemeProvider from '../MuiThemeProvider'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -351,4 +352,11 @@ export const AnalyticsView: React.FC = () => {
   )
 }
 
-export default AnalyticsView
+// Wrap with MUI Theme Provider to isolate styles
+export default function AnalyticsViewWithTheme() {
+  return (
+    <MuiThemeProvider>
+      <AnalyticsView />
+    </MuiThemeProvider>
+  )
+}

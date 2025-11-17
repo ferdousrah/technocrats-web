@@ -29,21 +29,21 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Custom admin components temporarily disabled to avoid styling conflicts
-    // components: {
-    //   views: {
-    //     dashboard: {
-    //       Component: './components/admin/dashboard/CustomDashboard',
-    //       path: '/',
-    //       exact: true,
-    //     },
-    //     analytics: {
-    //       Component: './components/admin/views/AnalyticsView',
-    //       path: '/analytics',
-    //       exact: true,
-    //     },
-    //   },
-    // },
+    // Custom admin components with MUI theme provider for style isolation
+    components: {
+      views: {
+        dashboard: {
+          Component: './components/admin/dashboard/CustomDashboard',
+          path: '/',
+          exact: true,
+        },
+        analytics: {
+          Component: './components/admin/views/AnalyticsView',
+          path: '/analytics',
+          exact: true,
+        },
+      },
+    },
     meta: {
       titleSuffix: '- Tech Company Admin',
     },
