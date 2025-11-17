@@ -11,12 +11,6 @@ import {
   CircularProgress,
   Tabs,
   Tab,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Chip,
 } from '@mui/material'
 import {
@@ -24,6 +18,7 @@ import {
   Article as ArticleIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material'
+import { DataGrid, GridColDef, GridRowsProp, GridToolbar } from '@mui/x-data-grid'
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import MuiThemeProvider from '../MuiThemeProvider'
 
@@ -62,9 +57,9 @@ export const AnalyticsView: React.FC = () => {
         setLoading(true)
 
         const [blogRes, servicesRes, productsRes] = await Promise.all([
-          fetch('/api/blog?limit=10&sort=-publishedDate').then(res => res.json()),
-          fetch('/api/services?limit=10').then(res => res.json()),
-          fetch('/api/products?limit=10').then(res => res.json()),
+          fetch('/api/blog?limit=100&sort=-publishedDate').then(res => res.json()),
+          fetch('/api/services?limit=100').then(res => res.json()),
+          fetch('/api/products?limit=100').then(res => res.json()),
         ])
 
         setBlogPosts(blogRes.docs || [])
@@ -98,85 +93,201 @@ export const AnalyticsView: React.FC = () => {
     { month: 'Feb', blog: 15, services: 10, products: 7 },
     { month: 'Mar', blog: 18, services: 12, products: 9 },
     { month: 'Apr', blog: 22, services: 14, products: 11 },
-    { month: 'May', blog: 25, services: 15, products: 13 },
-    { month: 'Jun', blog: 28, services: 16, products: 15 },
+    { month: 'May', blog: 25, services: 16, products: 13 },
+    { month: 'Jun', blog: 30, services: 18, products: 15 },
   ]
+
+  // Blog Posts DataGrid Columns
+  const blogColumns: GridColDef[] = [
+    {
+      field: 'title',
+      headerName: 'Title',
+      flex: 1,
+      minWidth: 250,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 130,
+      renderCell: (params) => (
+        <Chip
+          label={params.value}
+          color={params.value === 'published' ? 'success' : 'default'}
+          size="small"
+        />
+      ),
+    },
+    {
+      field: 'publishedDate',
+      headerName: 'Published Date',
+      width: 150,
+      valueFormatter: (value) => {
+        return value ? new Date(value).toLocaleDateString() : 'Not set'
+      },
+    },
+    {
+      field: 'categories',
+      headerName: 'Categories',
+      width: 200,
+      valueGetter: (value: any) => {
+        return Array.isArray(value) ? value.map((cat: any) => cat.name).join(', ') : 'None'
+      },
+    },
+  ]
+
+  const blogRows: GridRowsProp = blogPosts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    status: post.status,
+    publishedDate: post.publishedDate,
+    categories: post.categories || [],
+  }))
+
+  // Services DataGrid Columns
+  const serviceColumns: GridColDef[] = [
+    {
+      field: 'title',
+      headerName: 'Title',
+      flex: 1,
+      minWidth: 250,
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+      minWidth: 300,
+    },
+    {
+      field: 'serviceType',
+      headerName: 'Type',
+      width: 150,
+      valueGetter: (value: any) => {
+        return value?.name || 'N/A'
+      },
+    },
+    {
+      field: 'createdAt',
+      headerName: 'Created',
+      width: 150,
+      valueFormatter: (value: any) => {
+        return value ? new Date(value).toLocaleDateString() : 'N/A'
+      },
+    },
+  ]
+
+  const serviceRows: GridRowsProp = services.map((service) => ({
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    serviceType: service.serviceType,
+    createdAt: service.createdAt,
+  }))
+
+  // Products DataGrid Columns
+  const productColumns: GridColDef[] = [
+    {
+      field: 'title',
+      headerName: 'Name',
+      flex: 1,
+      minWidth: 250,
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+      minWidth: 300,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 130,
+      renderCell: (params) => (
+        <Chip
+          label={params.value || 'draft'}
+          color={params.value === 'published' ? 'success' : 'default'}
+          size="small"
+        />
+      ),
+    },
+    {
+      field: 'category',
+      headerName: 'Category',
+      width: 150,
+      valueGetter: (value: any) => {
+        return value?.name || 'N/A'
+      },
+    },
+  ]
+
+  const productRows: GridRowsProp = products.map((product) => ({
+    id: product.id,
+    title: product.title,
+    description: product.description,
+    status: product.status,
+    category: product.category,
+  }))
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 4, fontWeight: 600 }}>
-        Analytics & Insights
+      <Typography variant="h4" gutterBottom>
+        Analytics Dashboard
       </Typography>
 
       {/* Key Metrics */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={3} sx={{ mb: 3 }}>
         <Grid item xs={12} md={4}>
           <Card>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <ArticleIcon sx={{ fontSize: 40, color: '#1976d2' }} />
                 <Box>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Total Content Items
+                  <Typography variant="body2" color="text.secondary">
+                    Total Blog Posts
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                    {blogPosts.length + services.length + products.length}
-                  </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                    <TrendingUpIcon sx={{ fontSize: 16, color: 'success.main', mr: 0.5 }} />
-                    <Typography variant="body2" color="success.main">
-                      12% increase
+                  <Typography variant="h5">{blogPosts.length}</Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'success.main', mt: 0.5 }}>
+                    <TrendingUpIcon fontSize="small" />
+                    <Typography variant="caption" sx={{ ml: 0.5 }}>
+                      {blogPosts.filter(p => p.status === 'published').length} Published
                     </Typography>
                   </Box>
                 </Box>
-                <ArticleIcon sx={{ fontSize: 48, color: 'primary.main', opacity: 0.3 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} md={4}>
           <Card>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <VisibilityIcon sx={{ fontSize: 40, color: '#2e7d32' }} />
                 <Box>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Published Blog Posts
+                  <Typography variant="body2" color="text.secondary">
+                    Total Services
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                    {blogPosts.filter(post => post.status === 'published').length}
+                  <Typography variant="h5">{services.length}</Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                    Active offerings
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                    <TrendingUpIcon sx={{ fontSize: 16, color: 'success.main', mr: 0.5 }} />
-                    <Typography variant="body2" color="success.main">
-                      8% increase
-                    </Typography>
-                  </Box>
                 </Box>
-                <VisibilityIcon sx={{ fontSize: 48, color: 'success.main', opacity: 0.3 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
-
         <Grid item xs={12} md={4}>
           <Card>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <ArticleIcon sx={{ fontSize: 40, color: '#ed6c02' }} />
                 <Box>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    Active Services
+                  <Typography variant="body2" color="text.secondary">
+                    Total Products
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 600 }}>
-                    {services.filter(service => service.status === 'active').length}
+                  <Typography variant="h5">{products.length}</Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                    In catalog
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                    <TrendingUpIcon sx={{ fontSize: 16, color: 'success.main', mr: 0.5 }} />
-                    <Typography variant="body2" color="success.main">
-                      5% increase
-                    </Typography>
-                  </Box>
                 </Box>
-                <TrendingUpIcon sx={{ fontSize: 48, color: 'warning.main', opacity: 0.3 }} />
               </Box>
             </CardContent>
           </Card>
@@ -184,8 +295,8 @@ export const AnalyticsView: React.FC = () => {
       </Grid>
 
       {/* Trend Chart */}
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
           Content Growth Trend
         </Typography>
         <ResponsiveContainer width="100%" height={300}>
@@ -202,150 +313,110 @@ export const AnalyticsView: React.FC = () => {
         </ResponsiveContainer>
       </Paper>
 
-      {/* Tabbed Content */}
+      {/* Tabbed DataGrid Content */}
       <Paper sx={{ p: 3 }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="Recent Blog Posts" />
-            <Tab label="Services Overview" />
-            <Tab label="Products Overview" />
+            <Tab label={`Blog Posts (${blogPosts.length})`} />
+            <Tab label={`Services (${services.length})`} />
+            <Tab label={`Products (${products.length})`} />
           </Tabs>
         </Box>
 
         <TabPanel value={tabValue} index={0}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Published Date</TableCell>
-                  <TableCell>Read Time</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {blogPosts.map((post) => (
-                  <TableRow
-                    key={post.id}
-                    sx={{ '&:hover': { backgroundColor: 'action.hover', cursor: 'pointer' } }}
-                    onClick={() => window.location.href = `/admin/collections/blog/${post.id}`}
-                  >
-                    <TableCell>{post.title}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={post.status}
-                        color={post.status === 'published' ? 'success' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {post.publishedDate ? new Date(post.publishedDate).toLocaleDateString() : 'Not set'}
-                    </TableCell>
-                    <TableCell>{post.readTime ? `${post.readTime} min` : 'N/A'}</TableCell>
-                  </TableRow>
-                ))}
-                {blogPosts.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={4} align="center">
-                      No blog posts found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box sx={{ height: 600, width: '100%' }}>
+            <DataGrid
+              rows={blogRows}
+              columns={blogColumns}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25, 50, 100]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              onRowClick={(params) => {
+                window.location.href = `/admin/collections/blog/${params.id}`
+              }}
+              sx={{
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            />
+          </Box>
         </TabPanel>
 
         <TabPanel value={tabValue} index={1}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Featured</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {services.map((service) => (
-                  <TableRow
-                    key={service.id}
-                    sx={{ '&:hover': { backgroundColor: 'action.hover', cursor: 'pointer' } }}
-                    onClick={() => window.location.href = `/admin/collections/services/${service.id}`}
-                  >
-                    <TableCell>{service.title}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={service.status}
-                        color={service.status === 'active' ? 'success' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={service.featured ? 'Yes' : 'No'}
-                        color={service.featured ? 'primary' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {services.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={3} align="center">
-                      No services found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box sx={{ height: 600, width: '100%' }}>
+            <DataGrid
+              rows={serviceRows}
+              columns={serviceColumns}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25, 50, 100]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              onRowClick={(params) => {
+                window.location.href = `/admin/collections/services/${params.id}`
+              }}
+              sx={{
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            />
+          </Box>
         </TabPanel>
 
         <TabPanel value={tabValue} index={2}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Featured</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {products.map((product) => (
-                  <TableRow
-                    key={product.id}
-                    sx={{ '&:hover': { backgroundColor: 'action.hover', cursor: 'pointer' } }}
-                    onClick={() => window.location.href = `/admin/collections/products/${product.id}`}
-                  >
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>
-                      <Chip
-                        label={product.status}
-                        color={product.status === 'active' ? 'success' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        label={product.featured ? 'Yes' : 'No'}
-                        color={product.featured ? 'primary' : 'default'}
-                        size="small"
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {products.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={3} align="center">
-                      No products found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box sx={{ height: 600, width: '100%' }}>
+            <DataGrid
+              rows={productRows}
+              columns={productColumns}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  showQuickFilter: true,
+                  quickFilterProps: { debounceMs: 500 },
+                },
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: { pageSize: 10 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 25, 50, 100]}
+              checkboxSelection
+              disableRowSelectionOnClick
+              onRowClick={(params) => {
+                window.location.href = `/admin/collections/products/${params.id}`
+              }}
+              sx={{
+                '& .MuiDataGrid-row:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            />
+          </Box>
         </TabPanel>
       </Paper>
     </Box>

@@ -25,6 +25,7 @@
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
     "@mui/system": "^7.3.5",
+    "@mui/x-data-grid": "^8.18.0",
     "@payloadcms/db-postgres": "3.64.0",
     "@payloadcms/next": "3.64.0",
     "@payloadcms/richtext-lexical": "3.64.0",
