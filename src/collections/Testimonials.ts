@@ -6,6 +6,13 @@ export const Testimonials: CollectionConfig = {
   admin: {
     useAsTitle: 'clientName',
     defaultColumns: ['clientName', 'company', 'rating', 'featured', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/TestimonialsList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

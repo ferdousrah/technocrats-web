@@ -8,6 +8,13 @@ export const Projects: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'client', 'serviceType', 'featured', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/ProjectsList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,
