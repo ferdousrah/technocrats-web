@@ -79,6 +79,7 @@ const navCategories: NavCategory[] = [
 
 export default function CustomNav() {
   const pathname = usePathname()
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set(navCategories.filter(cat => cat.defaultOpen).map(cat => cat.title))
   )
@@ -103,9 +104,55 @@ export default function CustomNav() {
   }
 
   return (
-    <nav className="custom-nav">
+    <nav className={`custom-nav ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="custom-nav-header">
-        <h2 className="custom-nav-title">Admin Panel</h2>
+        <div className="nav-logo-container">
+          <div className="nav-logo">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="40" height="40" rx="8" fill="url(#gradient1)"/>
+              <path d="M20 10L28 15V25L20 30L12 25V15L20 10Z" fill="white" opacity="0.9"/>
+              <path d="M20 15L25 18V24L20 27L15 24V18L20 15Z" fill="url(#gradient2)"/>
+              <defs>
+                <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#667eea"/>
+                  <stop offset="1" stopColor="#764ba2"/>
+                </linearGradient>
+                <linearGradient id="gradient2" x1="15" y1="15" x2="25" y2="27" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#667eea"/>
+                  <stop offset="1" stopColor="#764ba2"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {!isCollapsed && (
+            <div className="nav-logo-text">
+              <h2 className="custom-nav-title">Technocrats</h2>
+              <span className="nav-logo-subtitle">Admin Panel</span>
+            </div>
+          )}
+        </div>
+        <button
+          className="nav-collapse-btn"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={isCollapsed ? 'rotated' : ''}
+          >
+            <path
+              d="M12 5L7 10L12 15"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
       </div>
 
       <div className="custom-nav-categories">
@@ -116,41 +163,50 @@ export default function CustomNav() {
             <div key={category.title} className="nav-category">
               <button
                 className={`nav-category-header ${isExpanded ? 'expanded' : ''}`}
-                onClick={() => toggleCategory(category.title)}
+                onClick={() => !isCollapsed && toggleCategory(category.title)}
+                title={isCollapsed ? category.title : ''}
               >
                 <span className="nav-category-icon">{category.icon}</span>
-                <span className="nav-category-title">{category.title}</span>
-                <span className={`nav-category-arrow ${isExpanded ? 'rotated' : ''}`}>
-                  ▼
-                </span>
+                {!isCollapsed && (
+                  <>
+                    <span className="nav-category-title">{category.title}</span>
+                    <span className={`nav-category-arrow ${isExpanded ? 'rotated' : ''}`}>
+                      ▼
+                    </span>
+                  </>
+                )}
               </button>
 
-              <div className={`nav-category-items ${isExpanded ? 'expanded' : ''}`}>
-                {category.items.map((item) => {
-                  const active = isActive(item.href)
+              {!isCollapsed && (
+                <div className={`nav-category-items ${isExpanded ? 'expanded' : ''}`}>
+                  {category.items.map((item) => {
+                    const active = isActive(item.href)
 
-                  return (
-                    <a
-                      key={item.href}
-                      href={item.href}
-                      className={`nav-item ${active ? 'active' : ''}`}
-                    >
-                      <span className="nav-item-label">{item.label}</span>
-                      {active && <span className="nav-item-indicator">●</span>}
-                    </a>
-                  )
-                })}
-              </div>
+                    return (
+                      <a
+                        key={item.href}
+                        href={item.href}
+                        className={`nav-item ${active ? 'active' : ''}`}
+                      >
+                        <span className="nav-item-label">{item.label}</span>
+                        {active && <span className="nav-item-indicator">●</span>}
+                      </a>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )
         })}
       </div>
 
-      <div className="custom-nav-footer">
-        <div className="nav-footer-info">
-          <small>Technocrats Admin v1.0</small>
+      {!isCollapsed && (
+        <div className="custom-nav-footer">
+          <div className="nav-footer-info">
+            <small>Technocrats Admin v1.0</small>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   )
 }
