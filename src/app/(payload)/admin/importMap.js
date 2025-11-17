@@ -1,5 +1,6 @@
 import { default as default_7834229b228a266ca510a3aaba96fcbf } from '../../../components/admin/collections/UsersList'
 import { default as default_c0f5f62cdd3d5d84754dc51bc7a02e96 } from '../../../components/admin/collections/MediaList'
+import { default as default_336c40cd2bda8a878eb740a809fd3baa } from '../../../components/admin/collections/MenusList'
 import { ServiceTypesList as ServiceTypesList_8f1d439cc289adf81730f9ebcc76c419 } from '../../../components/admin/collections/TaxonomyList'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -42,6 +43,7 @@ import { default as default_9d80edae6c0796073a05eaf3a6882039 } from '../../../co
 export const importMap = {
   "./components/admin/collections/UsersList#default": default_7834229b228a266ca510a3aaba96fcbf,
   "./components/admin/collections/MediaList#default": default_c0f5f62cdd3d5d84754dc51bc7a02e96,
+  "./components/admin/collections/MenusList#default": default_336c40cd2bda8a878eb740a809fd3baa,
   "./components/admin/collections/TaxonomyList#ServiceTypesList": ServiceTypesList_8f1d439cc289adf81730f9ebcc76c419,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,

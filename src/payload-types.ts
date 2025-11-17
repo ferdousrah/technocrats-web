@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    menus: Menu;
     'service-types': ServiceType;
     services: Service;
     'product-categories': ProductCategory;
@@ -89,6 +90,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    menus: MenusSelect<false> | MenusSelect<true>;
     'service-types': ServiceTypesSelect<false> | ServiceTypesSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
@@ -254,12 +256,254 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "service-types".
+ * via the `definition` "menus".
  */
-export interface ServiceType {
+export interface Menu {
   id: number;
   /**
-   * e.g., AI & ML Development, Web Development, etc.
+   * A unique name for this menu (e.g., "Header Menu", "Footer Menu")
+   */
+  name: string;
+  /**
+   * Where this menu should appear on your website
+   */
+  location: 'header-primary' | 'header-secondary' | 'footer-main' | 'footer-secondary' | 'mobile' | 'sidebar';
+  /**
+   * Add and organize your menu items. Drag to reorder.
+   */
+  items?:
+    | {
+        /**
+         * Text to display for this menu item
+         */
+        label: string;
+        /**
+         * Choose the type of link for this menu item
+         */
+        type: 'custom' | 'blog' | 'service' | 'product' | 'project' | 'blog-category' | 'product-category';
+        /**
+         * Enter a custom URL (e.g., /about, https://example.com)
+         */
+        customUrl?: string | null;
+        /**
+         * Choose a blog post to link to
+         */
+        blogPost?: (number | null) | Blog;
+        /**
+         * Choose a service to link to
+         */
+        service?: (number | null) | Service;
+        /**
+         * Choose a product to link to
+         */
+        product?: (number | null) | Product;
+        /**
+         * Choose a project to link to
+         */
+        project?: (number | null) | Project;
+        /**
+         * Choose a blog category to link to
+         */
+        blogCategory?: (number | null) | BlogCategory;
+        /**
+         * Choose a product category to link to
+         */
+        productCategory?: (number | null) | ProductCategory;
+        /**
+         * Optional icon class (e.g., "fas fa-home" for Font Awesome)
+         */
+        icon?: string | null;
+        /**
+         * Open this link in a new browser tab
+         */
+        openInNewTab?: boolean | null;
+        /**
+         * Optional CSS class for custom styling
+         */
+        cssClass?: string | null;
+        /**
+         * Optional description for mega menus or tooltips
+         */
+        description?: string | null;
+        /**
+         * Add nested submenu items
+         */
+        children?:
+          | {
+              label: string;
+              type: 'custom' | 'blog' | 'service' | 'product' | 'project' | 'blog-category' | 'product-category';
+              customUrl?: string | null;
+              blogPost?: (number | null) | Blog;
+              service?: (number | null) | Service;
+              product?: (number | null) | Product;
+              project?: (number | null) | Project;
+              blogCategory?: (number | null) | BlogCategory;
+              productCategory?: (number | null) | ProductCategory;
+              icon?: string | null;
+              openInNewTab?: boolean | null;
+              cssClass?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Toggle to enable/disable this menu
+   */
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from title. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Article author
+   */
+  author: number | User;
+  /**
+   * Brief article summary (max 300 characters)
+   */
+  excerpt: string;
+  /**
+   * Full article content with enhanced formatting options
+   */
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Main article image
+   */
+  featuredImage?: (number | null) | Media;
+  /**
+   * Article category
+   */
+  category: number | BlogCategory;
+  /**
+   * Article tags for better searchability
+   */
+  tags?: (number | BlogTag)[] | null;
+  /**
+   * Related services mentioned in the article
+   */
+  relatedServices?: (number | Service)[] | null;
+  /**
+   * Related projects mentioned in the article
+   */
+  relatedProjects?: (number | Project)[] | null;
+  /**
+   * Estimated read time in minutes
+   */
+  readTime?: number | null;
+  /**
+   * Feature this article on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Article publication date
+   */
+  publishedDate?: string | null;
+  status: 'draft' | 'published';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Auto-generated from slug. Customize if needed for duplicate content management.
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-categories".
+ */
+export interface BlogCategory {
+  id: number;
+  /**
+   * e.g., AI & Machine Learning, Web Development, Case Studies, etc.
    */
   name: string;
   /**
@@ -267,15 +511,41 @@ export interface ServiceType {
    */
   slug?: string | null;
   /**
-   * Brief description of this service type
+   * Brief description of this blog category
    */
   description?: string | null;
   /**
-   * Icon or image representing this service type
+   * Hex color code for UI theming (e.g., #2196F3)
    */
-  icon?: (number | null) | Media;
+  color?: string | null;
   /**
-   * Hex color code for UI theming (e.g., #FF6B6B)
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-tags".
+ */
+export interface BlogTag {
+  id: number;
+  /**
+   * e.g., JavaScript, TypeScript, AI, Machine Learning, etc.
+   */
+  name: string;
+  /**
+   * Auto-generated from name. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Brief description of this tag
+   */
+  description?: string | null;
+  /**
+   * Hex color code for UI theming (e.g., #10B981)
    */
   color?: string | null;
   /**
@@ -434,12 +704,12 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "product-categories".
+ * via the `definition` "service-types".
  */
-export interface ProductCategory {
+export interface ServiceType {
   id: number;
   /**
-   * e.g., Human Resource Management (HRM), Accounting & Finance, etc.
+   * e.g., AI & ML Development, Web Development, etc.
    */
   name: string;
   /**
@@ -447,15 +717,15 @@ export interface ProductCategory {
    */
   slug?: string | null;
   /**
-   * Brief description of this product category
+   * Brief description of this service type
    */
   description?: string | null;
   /**
-   * Icon or image representing this product category
+   * Icon or image representing this service type
    */
   icon?: (number | null) | Media;
   /**
-   * Hex color code for UI theming (e.g., #4CAF50)
+   * Hex color code for UI theming (e.g., #FF6B6B)
    */
   color?: string | null;
   /**
@@ -463,6 +733,180 @@ export interface ProductCategory {
    */
   order?: number | null;
   status: 'active' | 'inactive';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  /**
+   * Auto-generated from title. You can customize it if needed.
+   */
+  slug?: string | null;
+  /**
+   * Client or company name
+   */
+  client: string;
+  /**
+   * Services provided for this project
+   */
+  serviceType?: (number | Service)[] | null;
+  /**
+   * Brief project summary (max 250 characters)
+   */
+  summary: string;
+  /**
+   * Detailed project description, challenges, and solutions
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Main project image
+   */
+  featuredImage: number | Media;
+  /**
+   * Additional project images
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technologies, frameworks, and tools used
+   */
+  technologies?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Project outcomes and metrics
+   */
+  results?: {
+    metrics?:
+      | {
+          /**
+           * e.g., "Performance Improvement", "User Growth"
+           */
+          label: string;
+          /**
+           * e.g., "50%", "10,000+ users"
+           */
+          value: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Live project URL (if applicable)
+   */
+  projectUrl?: string | null;
+  duration?: {
+    startDate?: string | null;
+    completionDate?: string | null;
+  };
+  /**
+   * Number of team members involved
+   */
+  teamSize?: number | null;
+  /**
+   * Feature this project on the homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Display order (lower numbers appear first)
+   */
+  order?: number | null;
+  status: 'draft' | 'published';
+  seo?: {
+    /**
+     * Recommended: 50-60 characters. Leave empty to use the page title.
+     */
+    metaTitle?: string | null;
+    /**
+     * Recommended: 150-160 characters. This appears in search results.
+     */
+    metaDescription?: string | null;
+    /**
+     * Comma-separated keywords (e.g., web development, ai, machine learning)
+     */
+    keywords?: string | null;
+    /**
+     * Open Graph image for social media sharing (recommended: 1200x630px)
+     */
+    ogImage?: (number | null) | Media;
+    /**
+     * Open Graph title (defaults to metaTitle if empty)
+     */
+    ogTitle?: string | null;
+    /**
+     * Open Graph description (defaults to metaDescription if empty)
+     */
+    ogDescription?: string | null;
+    /**
+     * Auto-generated from slug. Customize if needed for duplicate content management.
+     */
+    canonicalUrl?: string | null;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+    /**
+     * Prevent search engines from following links on this page
+     */
+    noFollow?: boolean | null;
+  };
+  /**
+   * Structured data for rich snippets in search results
+   */
+  jsonLd?: {
+    /**
+     * Enable structured data for this page
+     */
+    enabled?: boolean | null;
+    /**
+     * Schema.org type for structured data
+     */
+    schemaType?:
+      | (
+          | 'Article'
+          | 'BlogPosting'
+          | 'Product'
+          | 'Service'
+          | 'Organization'
+          | 'Person'
+          | 'WebPage'
+          | 'SoftwareApplication'
+          | 'Review'
+          | 'FAQPage'
+        )
+      | null;
+    /**
+     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
+     */
+    customSchema?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -782,175 +1226,35 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "projects".
+ * via the `definition` "product-categories".
  */
-export interface Project {
+export interface ProductCategory {
   id: number;
-  title: string;
   /**
-   * Auto-generated from title. You can customize it if needed.
+   * e.g., Human Resource Management (HRM), Accounting & Finance, etc.
+   */
+  name: string;
+  /**
+   * Auto-generated from name. You can customize it if needed.
    */
   slug?: string | null;
   /**
-   * Client or company name
+   * Brief description of this product category
    */
-  client: string;
+  description?: string | null;
   /**
-   * Services provided for this project
+   * Icon or image representing this product category
    */
-  serviceType?: (number | Service)[] | null;
+  icon?: (number | null) | Media;
   /**
-   * Brief project summary (max 250 characters)
+   * Hex color code for UI theming (e.g., #4CAF50)
    */
-  summary: string;
-  /**
-   * Detailed project description, challenges, and solutions
-   */
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * Main project image
-   */
-  featuredImage: number | Media;
-  /**
-   * Additional project images
-   */
-  gallery?:
-    | {
-        image: number | Media;
-        caption?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Technologies, frameworks, and tools used
-   */
-  technologies?:
-    | {
-        name: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Project outcomes and metrics
-   */
-  results?: {
-    metrics?:
-      | {
-          /**
-           * e.g., "Performance Improvement", "User Growth"
-           */
-          label: string;
-          /**
-           * e.g., "50%", "10,000+ users"
-           */
-          value: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  /**
-   * Live project URL (if applicable)
-   */
-  projectUrl?: string | null;
-  duration?: {
-    startDate?: string | null;
-    completionDate?: string | null;
-  };
-  /**
-   * Number of team members involved
-   */
-  teamSize?: number | null;
-  /**
-   * Feature this project on the homepage
-   */
-  featured?: boolean | null;
+  color?: string | null;
   /**
    * Display order (lower numbers appear first)
    */
   order?: number | null;
-  status: 'draft' | 'published';
-  seo?: {
-    /**
-     * Recommended: 50-60 characters. Leave empty to use the page title.
-     */
-    metaTitle?: string | null;
-    /**
-     * Recommended: 150-160 characters. This appears in search results.
-     */
-    metaDescription?: string | null;
-    /**
-     * Comma-separated keywords (e.g., web development, ai, machine learning)
-     */
-    keywords?: string | null;
-    /**
-     * Open Graph image for social media sharing (recommended: 1200x630px)
-     */
-    ogImage?: (number | null) | Media;
-    /**
-     * Open Graph title (defaults to metaTitle if empty)
-     */
-    ogTitle?: string | null;
-    /**
-     * Open Graph description (defaults to metaDescription if empty)
-     */
-    ogDescription?: string | null;
-    /**
-     * Auto-generated from slug. Customize if needed for duplicate content management.
-     */
-    canonicalUrl?: string | null;
-    /**
-     * Prevent search engines from indexing this page
-     */
-    noIndex?: boolean | null;
-    /**
-     * Prevent search engines from following links on this page
-     */
-    noFollow?: boolean | null;
-  };
-  /**
-   * Structured data for rich snippets in search results
-   */
-  jsonLd?: {
-    /**
-     * Enable structured data for this page
-     */
-    enabled?: boolean | null;
-    /**
-     * Schema.org type for structured data
-     */
-    schemaType?:
-      | (
-          | 'Article'
-          | 'BlogPosting'
-          | 'Product'
-          | 'Service'
-          | 'Organization'
-          | 'Person'
-          | 'WebPage'
-          | 'SoftwareApplication'
-          | 'Review'
-          | 'FAQPage'
-        )
-      | null;
-    /**
-     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
-     */
-    customSchema?: string | null;
-  };
+  status: 'active' | 'inactive';
   updatedAt: string;
   createdAt: string;
 }
@@ -1165,207 +1469,6 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-categories".
- */
-export interface BlogCategory {
-  id: number;
-  /**
-   * e.g., AI & Machine Learning, Web Development, Case Studies, etc.
-   */
-  name: string;
-  /**
-   * Auto-generated from name. You can customize it if needed.
-   */
-  slug?: string | null;
-  /**
-   * Brief description of this blog category
-   */
-  description?: string | null;
-  /**
-   * Hex color code for UI theming (e.g., #2196F3)
-   */
-  color?: string | null;
-  /**
-   * Display order (lower numbers appear first)
-   */
-  order?: number | null;
-  status: 'active' | 'inactive';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog-tags".
- */
-export interface BlogTag {
-  id: number;
-  /**
-   * e.g., JavaScript, TypeScript, AI, Machine Learning, etc.
-   */
-  name: string;
-  /**
-   * Auto-generated from name. You can customize it if needed.
-   */
-  slug?: string | null;
-  /**
-   * Brief description of this tag
-   */
-  description?: string | null;
-  /**
-   * Hex color code for UI theming (e.g., #10B981)
-   */
-  color?: string | null;
-  /**
-   * Display order (lower numbers appear first)
-   */
-  order?: number | null;
-  status: 'active' | 'inactive';
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blog".
- */
-export interface Blog {
-  id: number;
-  title: string;
-  /**
-   * Auto-generated from title. You can customize it if needed.
-   */
-  slug?: string | null;
-  /**
-   * Article author
-   */
-  author: number | User;
-  /**
-   * Brief article summary (max 300 characters)
-   */
-  excerpt: string;
-  /**
-   * Full article content with enhanced formatting options
-   */
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * Main article image
-   */
-  featuredImage?: (number | null) | Media;
-  /**
-   * Article category
-   */
-  category: number | BlogCategory;
-  /**
-   * Article tags for better searchability
-   */
-  tags?: (number | BlogTag)[] | null;
-  /**
-   * Related services mentioned in the article
-   */
-  relatedServices?: (number | Service)[] | null;
-  /**
-   * Related projects mentioned in the article
-   */
-  relatedProjects?: (number | Project)[] | null;
-  /**
-   * Estimated read time in minutes
-   */
-  readTime?: number | null;
-  /**
-   * Feature this article on homepage
-   */
-  featured?: boolean | null;
-  /**
-   * Article publication date
-   */
-  publishedDate?: string | null;
-  status: 'draft' | 'published';
-  seo?: {
-    /**
-     * Recommended: 50-60 characters. Leave empty to use the page title.
-     */
-    metaTitle?: string | null;
-    /**
-     * Recommended: 150-160 characters. This appears in search results.
-     */
-    metaDescription?: string | null;
-    /**
-     * Comma-separated keywords (e.g., web development, ai, machine learning)
-     */
-    keywords?: string | null;
-    /**
-     * Open Graph image for social media sharing (recommended: 1200x630px)
-     */
-    ogImage?: (number | null) | Media;
-    /**
-     * Open Graph title (defaults to metaTitle if empty)
-     */
-    ogTitle?: string | null;
-    /**
-     * Open Graph description (defaults to metaDescription if empty)
-     */
-    ogDescription?: string | null;
-    /**
-     * Auto-generated from slug. Customize if needed for duplicate content management.
-     */
-    canonicalUrl?: string | null;
-    /**
-     * Prevent search engines from indexing this page
-     */
-    noIndex?: boolean | null;
-    /**
-     * Prevent search engines from following links on this page
-     */
-    noFollow?: boolean | null;
-  };
-  /**
-   * Structured data for rich snippets in search results
-   */
-  jsonLd?: {
-    /**
-     * Enable structured data for this page
-     */
-    enabled?: boolean | null;
-    /**
-     * Schema.org type for structured data
-     */
-    schemaType?:
-      | (
-          | 'Article'
-          | 'BlogPosting'
-          | 'Product'
-          | 'Service'
-          | 'Organization'
-          | 'Person'
-          | 'WebPage'
-          | 'SoftwareApplication'
-          | 'Review'
-          | 'FAQPage'
-        )
-      | null;
-    /**
-     * Custom JSON-LD schema (advanced users only). Leave empty for auto-generation.
-     */
-    customSchema?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-inquiries".
  */
 export interface ContactInquiry {
@@ -1463,6 +1566,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'menus';
+        value: number | Menu;
       } | null)
     | ({
         relationTo: 'service-types';
@@ -1646,6 +1753,52 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "menus_select".
+ */
+export interface MenusSelect<T extends boolean = true> {
+  name?: T;
+  location?: T;
+  items?:
+    | T
+    | {
+        label?: T;
+        type?: T;
+        customUrl?: T;
+        blogPost?: T;
+        service?: T;
+        product?: T;
+        project?: T;
+        blogCategory?: T;
+        productCategory?: T;
+        icon?: T;
+        openInNewTab?: T;
+        cssClass?: T;
+        description?: T;
+        children?:
+          | T
+          | {
+              label?: T;
+              type?: T;
+              customUrl?: T;
+              blogPost?: T;
+              service?: T;
+              product?: T;
+              project?: T;
+              blogCategory?: T;
+              productCategory?: T;
+              icon?: T;
+              openInNewTab?: T;
+              cssClass?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
