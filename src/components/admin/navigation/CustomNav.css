@@ -8,6 +8,11 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   overflow-y: auto;
   position: relative;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-nav.collapsed {
+  width: 80px;
 }
 
 .custom-nav::-webkit-scrollbar {
@@ -28,9 +33,53 @@
 }
 
 .custom-nav-header {
-  padding: 24px 20px;
+  padding: 20px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+}
+
+.nav-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-logo svg {
+  display: block;
+}
+
+.nav-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  opacity: 1;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-nav.collapsed .nav-logo-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
 .custom-nav-title {
@@ -42,6 +91,73 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.nav-logo-subtitle {
+  font-size: 11px;
+  color: #a1a1aa;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.nav-collapse-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(102, 126, 234, 0.1);
+  color: #a1a1aa;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-collapse-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-collapse-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.nav-collapse-btn:hover::before {
+  opacity: 0.15;
+}
+
+.nav-collapse-btn:active {
+  transform: scale(0.95);
+}
+
+.nav-collapse-btn svg {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-collapse-btn svg.rotated {
+  transform: rotate(180deg);
+}
+
+.custom-nav.collapsed .nav-collapse-btn svg {
+  transform: rotate(180deg);
+}
+
+.custom-nav.collapsed .nav-collapse-btn svg.rotated {
+  transform: rotate(0deg);
 }
 
 .custom-nav-categories {
@@ -71,6 +187,11 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+}
+
+.custom-nav.collapsed .nav-category-header {
+  padding: 12px 20px;
+  justify-content: center;
 }
 
 .nav-category-header::before {
