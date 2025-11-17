@@ -7,6 +7,13 @@ export const ServiceTypes: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'order', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/TaxonomyList#ServiceTypesList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

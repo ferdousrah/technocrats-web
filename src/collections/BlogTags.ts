@@ -7,6 +7,13 @@ export const BlogTags: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'slug', 'order', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/TaxonomyList#BlogTagsList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

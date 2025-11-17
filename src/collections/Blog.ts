@@ -21,6 +21,13 @@ export const Blog: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'author', 'category', 'status', 'publishedDate'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/BlogList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

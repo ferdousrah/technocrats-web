@@ -8,6 +8,13 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'category', 'version', 'featured', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/ProductsList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

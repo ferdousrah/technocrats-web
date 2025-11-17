@@ -8,6 +8,13 @@ export const Services: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'serviceType', 'featured', 'status'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/ServicesList',
+        },
+      },
+    },
   },
   access: {
     read: isPublic,

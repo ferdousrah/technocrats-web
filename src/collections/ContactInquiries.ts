@@ -6,6 +6,13 @@ export const ContactInquiries: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'serviceInterest', 'status', 'createdAt'],
+    components: {
+      views: {
+        list: {
+          Component: './components/admin/collections/ContactInquiriesList',
+        },
+      },
+    },
   },
   access: {
     read: isAuthenticated, // Only authenticated users can read/manage inquiries
