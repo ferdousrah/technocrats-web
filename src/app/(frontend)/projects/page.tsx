@@ -3,6 +3,7 @@ import { fetchDocs } from "@/lib/api";
 import { Project, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
 import BackgroundParallax from "@/components/frontend/animation/BackgroundParallax";
+import Footer2 from "@/components/frontend/footers/Footer2";
 
 export const metadata = {
   title: "Projects - Technocrats",
@@ -20,7 +21,8 @@ export default async function ProjectsPage() {
   });
 
   return (
-    <div className="mxd-section padding-default">
+    <>
+      <div className="mxd-section padding-default">
       <div className="mxd-container grid-container">
         {/* Section Title */}
         <div className="mxd-block">
@@ -123,5 +125,7 @@ export default async function ProjectsPage() {
         </div>
       </div>
     </div>
+      <Footer2 />
+    </>
   );
 }

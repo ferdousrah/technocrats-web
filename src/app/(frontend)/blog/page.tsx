@@ -4,6 +4,7 @@ import { fetchDocs } from "@/lib/api";
 import { BlogPost, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
 import BackgroundParallax from "@/components/frontend/animation/BackgroundParallax";
+import Footer2 from "@/components/frontend/footers/Footer2";
 
 export const metadata = {
   title: "Blog - Technocrats",
@@ -24,7 +25,8 @@ export default async function BlogPage() {
   });
 
   return (
-    <div className="mxd-section padding-default">
+    <>
+      <div className="mxd-section padding-default">
       <div className="mxd-container grid-container">
         {/* Section Title */}
         <div className="mxd-block">
@@ -142,5 +144,7 @@ export default async function BlogPage() {
         </div>
       </div>
     </div>
+      <Footer2 />
+    </>
   );
 }
