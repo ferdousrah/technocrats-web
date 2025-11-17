@@ -21,6 +21,7 @@ import {
   Category as CategoryIcon,
 } from '@mui/icons-material'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
+import MuiThemeProvider from '../MuiThemeProvider'
 
 interface StatCardProps {
   title: string
@@ -390,4 +391,11 @@ export const CustomDashboard: React.FC = () => {
   )
 }
 
-export default CustomDashboard
+// Wrap with MUI Theme Provider to isolate styles
+export default function CustomDashboardWithTheme() {
+  return (
+    <MuiThemeProvider>
+      <CustomDashboard />
+    </MuiThemeProvider>
+  )
+}
