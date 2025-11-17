@@ -31,6 +31,7 @@ const navCategories: NavCategory[] = [
     title: 'Content',
     icon: '📝',
     items: [
+      { label: 'Menus', href: '/admin/collections/menus' },
       { label: 'Blog Posts', href: '/admin/collections/blog' },
       { label: 'Projects', href: '/admin/collections/projects' },
       { label: 'Services', href: '/admin/collections/services' },
