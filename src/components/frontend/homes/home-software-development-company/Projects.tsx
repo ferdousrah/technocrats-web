@@ -57,7 +57,21 @@ export default async function Projects() {
                 </div>
                 <div className="col-12 col-xl-7 mxd-pinned-projects__scroll">
                   <div className="mxd-pinned-projects__scroll-inner mxd-grid-item no-margin">
-                    {projects.map((project, index) => {
+                    {projects.length === 0 ? (
+                      <div className="mxd-project-item" style={{ padding: '3rem', textAlign: 'center' }}>
+                        <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '1rem' }}>
+                          No projects yet. Create your first project in the admin panel.
+                        </p>
+                        <AnimatedButton
+                          text="Go to Admin"
+                          className="btn btn-anim btn-default btn-outline slide-right-up"
+                          href="/admin/collections/projects"
+                        >
+                          <i className="ph-bold ph-arrow-right" />
+                        </AnimatedButton>
+                      </div>
+                    ) : (
+                      projects.map((project, index) => {
                       const featuredImage =
                         typeof project.featuredImage === "object"
                           ? (project.featuredImage as Media)?.url
@@ -107,7 +121,8 @@ export default async function Projects() {
                           </div>
                         </div>
                       );
-                    })}
+                    })
+                    )}
                   </div>
                 </div>
               </div>

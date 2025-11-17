@@ -55,13 +55,27 @@ export default async function Blogs({
           <div className="mxd-blog-preview">
             <div className="container-fluid p-0">
               <div className="row g-0">
-                {blogs.map((blog, idx) => {
-                  const featuredImage =
-                    typeof blog.featuredImage === "object"
-                      ? (blog.featuredImage as Media)?.url
-                      : blog.featuredImage;
+                {blogs.length === 0 ? (
+                  <div className="col-12" style={{ padding: '3rem', textAlign: 'center' }}>
+                    <p style={{ fontSize: '1.1rem', color: '#666', marginBottom: '1rem' }}>
+                      No blog posts yet. Create your first blog post in the admin panel.
+                    </p>
+                    <AnimatedButton
+                      text="Go to Admin"
+                      className="btn btn-anim btn-default btn-outline slide-right-up"
+                      href="/admin/collections/blog"
+                    >
+                      <i className="ph-bold ph-arrow-right" />
+                    </AnimatedButton>
+                  </div>
+                ) : (
+                  blogs.map((blog, idx) => {
+                    const featuredImage =
+                      typeof blog.featuredImage === "object"
+                        ? (blog.featuredImage as Media)?.url
+                        : blog.featuredImage;
 
-                  return (
+                    return (
                     <div
                       key={blog.id}
                       className="col-12 col-xl-4 mxd-blog-preview__item mxd-grid-item animate-card-3"
@@ -116,7 +130,8 @@ export default async function Blogs({
                       </div>
                     </div>
                   );
-                })}
+                })
+                )}
               </div>
             </div>
           </div>
