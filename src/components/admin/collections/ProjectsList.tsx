@@ -46,6 +46,7 @@ export default function ProjectsList() {
     <CollectionDataGridWithTheme
       collection="projects"
       columns={columns}
+      title="Projects"
       transformRow={(doc) => ({
         id: doc.id,
         title: doc.title,

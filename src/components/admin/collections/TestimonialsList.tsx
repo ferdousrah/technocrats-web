@@ -73,6 +73,7 @@ export default function TestimonialsList() {
     <CollectionDataGridWithTheme
       collection="testimonials"
       columns={columns}
+      title="Testimonials"
       transformRow={(doc) => {
         const photo = typeof doc.clientPhoto === 'object' ? doc.clientPhoto?.url : doc.clientPhoto
         return {

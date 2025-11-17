@@ -36,13 +36,15 @@ const columns: GridColDef[] = [
 
 interface TaxonomyListProps {
   collection: string
+  title: string
 }
 
-export default function TaxonomyList({ collection }: TaxonomyListProps) {
+export default function TaxonomyList({ collection, title }: TaxonomyListProps) {
   return (
     <CollectionDataGridWithTheme
       collection={collection}
       columns={columns}
+      title={title}
       transformRow={(doc) => ({
         id: doc.id,
         name: doc.name,
@@ -57,17 +59,17 @@ export default function TaxonomyList({ collection }: TaxonomyListProps) {
 
 // Specific exports for each taxonomy
 export function ServiceTypesList() {
-  return <TaxonomyList collection="service-types" />
+  return <TaxonomyList collection="service-types" title="Service Types" />
 }
 
 export function ProductCategoriesList() {
-  return <TaxonomyList collection="product-categories" />
+  return <TaxonomyList collection="product-categories" title="Product Categories" />
 }
 
 export function BlogCategoriesList() {
-  return <TaxonomyList collection="blog-categories" />
+  return <TaxonomyList collection="blog-categories" title="Blog Categories" />
 }
 
 export function BlogTagsList() {
-  return <TaxonomyList collection="blog-tags" />
+  return <TaxonomyList collection="blog-tags" title="Blog Tags" />
 }

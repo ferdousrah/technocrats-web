@@ -74,6 +74,7 @@ export default function MediaList() {
     <CollectionDataGridWithTheme
       collection="media"
       columns={columns}
+      title="Media"
       transformRow={(doc) => ({
         id: doc.id,
         thumbnail: doc.sizes?.thumbnail?.url || doc.url,

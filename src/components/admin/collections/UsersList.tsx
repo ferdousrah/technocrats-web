@@ -53,6 +53,7 @@ export default function UsersList() {
     <CollectionDataGridWithTheme
       collection="users"
       columns={columns}
+      title="Users"
       transformRow={(doc) => ({
         id: doc.id,
         name: doc.name || 'No name',

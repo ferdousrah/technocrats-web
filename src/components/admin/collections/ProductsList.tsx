@@ -51,6 +51,7 @@ export default function ProductsList() {
     <CollectionDataGridWithTheme
       collection="products"
       columns={columns}
+      title="Products"
       transformRow={(doc) => ({
         id: doc.id,
         title: doc.title,
