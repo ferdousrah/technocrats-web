@@ -191,34 +191,46 @@ function transformMenuItem(item: PayloadMenuItem): MenuItem {
 async function fetchMenuByLocation(location: string, fallback: MenuItem[]): Promise<MenuItem[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-    const response = await fetch(`${baseUrl}/api/menus?where[location][equals]=${location}&where[active][equals]=true&limit=1`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+    const url = `${baseUrl}/api/menus?where[location][equals]=${location}&where[active][equals]=true&limit=1`
+
+    console.log(`[Menu] Fetching menu for location: "${location}" from ${url}`)
+
+    const response = await fetch(url, {
+      next: { revalidate: 60 }, // Cache for 1 minute during development
+      cache: 'no-store', // Disable caching during development
     })
 
+    console.log(`[Menu] Response status: ${response.status} ${response.statusText}`)
+
     if (!response.ok) {
-      console.warn(`Failed to fetch menu for location "${location}": ${response.statusText}. Using fallback menu.`)
+      console.warn(`[Menu] Failed to fetch menu for location "${location}": ${response.statusText}. Using fallback menu.`)
       return fallback
     }
 
     const data = await response.json()
+    console.log(`[Menu] Response data:`, JSON.stringify(data, null, 2))
 
     if (!data.docs || data.docs.length === 0) {
-      console.warn(`No active menu found for location "${location}". Using fallback menu.`)
+      console.warn(`[Menu] No active menu found for location "${location}". Using fallback menu.`)
+      console.log(`[Menu] Available menus in response:`, data.totalDocs || 0)
       return fallback
     }
 
     const menu: PayloadMenu = data.docs[0]
+    console.log(`[Menu] Found menu: "${menu.name}" with ${menu.items?.length || 0} items`)
 
     if (!menu.items || menu.items.length === 0) {
-      console.warn(`Menu found for location "${location}" but has no items. Using fallback menu.`)
+      console.warn(`[Menu] Menu found for location "${location}" but has no items. Using fallback menu.`)
       return fallback
     }
 
     // Transform all menu items
-    return menu.items.map(transformMenuItem)
+    const transformed = menu.items.map(transformMenuItem)
+    console.log(`[Menu] Transformed ${transformed.length} menu items for "${location}"`)
+    return transformed
   } catch (error) {
-    console.error(`Error fetching menu for location "${location}":`, error)
-    console.warn('Using fallback menu.')
+    console.error(`[Menu] Error fetching menu for location "${location}":`, error)
+    console.warn('[Menu] Using fallback menu.')
     return fallback
   }
 }
