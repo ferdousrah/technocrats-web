@@ -16,7 +16,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import MuiThemeProvider from '../MuiThemeProvider'
 import './AnalyticsView.css'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d', '#ffc658']
@@ -78,27 +77,22 @@ export default function AnalyticsView() {
 
   if (loading) {
     return (
-      <MuiThemeProvider>
-        <div className="analytics-view">
-          <div className="analytics-loading">Loading analytics...</div>
-        </div>
-      </MuiThemeProvider>
+      <div className="analytics-view">
+        <div className="analytics-loading">Loading analytics...</div>
+      </div>
     )
   }
 
   if (!data) {
     return (
-      <MuiThemeProvider>
-        <div className="analytics-view">
-          <div className="analytics-error">Failed to load analytics data</div>
-        </div>
-      </MuiThemeProvider>
+      <div className="analytics-view">
+        <div className="analytics-error">Failed to load analytics data</div>
+      </div>
     )
   }
 
   return (
-    <MuiThemeProvider>
-      <div className="analytics-view">
+    <div className="analytics-view">
         <div className="analytics-header">
           <h1>Analytics Dashboard</h1>
           <div className="time-range-selector">
@@ -356,7 +350,6 @@ export default function AnalyticsView() {
           </table>
         </div>
       </div>
-      </div>
-    </MuiThemeProvider>
+    </div>
   )
 }
