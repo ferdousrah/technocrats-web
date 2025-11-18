@@ -115,7 +115,7 @@ export default async function Projects() {
                                 className="anim-img-scale-in"
                                 href={`/projects/${project.slug}`}
                               >
-                                <span>{project.title}</span> {project.description}
+                                <span>{project.title}</span> {project.summary}
                               </Link>
                             </div>
                           </div>
