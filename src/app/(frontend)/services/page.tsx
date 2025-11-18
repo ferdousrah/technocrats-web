@@ -4,6 +4,7 @@ import { getAllServices } from "@/lib/api";
 import { Service, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
 import Footer2 from "@/components/frontend/footers/Footer2";
+import { extractTextFromLexical } from "@/utils/lexical";
 
 export const metadata = {
   title: "Services - Technocrats",
@@ -56,6 +57,8 @@ export default async function ServicesPage() {
                     ? (service.featuredImage as Media)?.url
                     : service.featuredImage;
 
+                const description = extractTextFromLexical(service.description);
+
                 return (
                   <div
                     key={service.id}
@@ -89,7 +92,7 @@ export default async function ServicesPage() {
                             {service.title}
                           </h3>
                           <p className="mxd-service-card__description anim-uni-in-up">
-                            {service.description}
+                            {description}
                           </p>
                           <div className="mxd-service-card__link anim-uni-in-up">
                             <span className="link-underline">Learn More</span>

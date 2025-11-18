@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { fetchDocBySlug, fetchDocs } from "@/lib/api";
 import { Project, Media } from "@/types/payload";
 import LexicalRenderer from "@/components/frontend/blogs/LexicalRenderer";
+import { extractTextFromLexical } from "@/utils/lexical";
 import type { Metadata } from "next";
 
 interface ProjectPageProps {
@@ -27,12 +28,14 @@ export async function generateMetadata({
     };
   }
 
+  const description = project.seo?.description || extractTextFromLexical(project.description);
+
   return {
     title: project.seo?.title || project.title,
-    description: project.seo?.description || project.description,
+    description,
     openGraph: {
       title: project.seo?.title || project.title,
-      description: project.seo?.description || project.description,
+      description,
       images:
         project.seo?.ogImage &&
         typeof project.seo.ogImage === "object" &&
@@ -97,7 +100,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </div>
                 {project.description && (
                   <div className="mxd-article__subtitle loading__item">
-                    <p className="t-large">{project.description}</p>
+                    <p className="t-large">{extractTextFromLexical(project.description)}</p>
                   </div>
                 )}
                 {project.technologies && project.technologies.length > 0 && (

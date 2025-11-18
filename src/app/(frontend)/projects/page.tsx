@@ -4,6 +4,7 @@ import { Project, Media } from "@/types/payload";
 import RevealText from "@/components/frontend/animation/RevealText";
 import BackgroundParallax from "@/components/frontend/animation/BackgroundParallax";
 import Footer2 from "@/components/frontend/footers/Footer2";
+import { extractTextFromLexical } from "@/utils/lexical";
 
 export const metadata = {
   title: "Projects - Technocrats",
@@ -62,6 +63,8 @@ export default async function ProjectsPage() {
                           ? (project.featuredImage as Media)?.url
                           : project.featuredImage;
 
+                      const description = extractTextFromLexical(project.description);
+
                       return (
                         <div key={project.id} className="mxd-project-item">
                           <Link
@@ -103,7 +106,7 @@ export default async function ProjectsPage() {
                                 href={`/projects/${project.slug}`}
                               >
                                 <span>{project.title}</span>{" "}
-                                {project.description}
+                                {description}
                               </Link>
                             </div>
                             {project.client && (

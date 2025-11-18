@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { fetchDocBySlug, fetchDocs } from "@/lib/api";
 import { Service, Media } from "@/types/payload";
 import LexicalRenderer from "@/components/frontend/blogs/LexicalRenderer";
+import { extractTextFromLexical } from "@/utils/lexical";
 import type { Metadata } from "next";
 
 interface ServicePageProps {
@@ -27,12 +28,14 @@ export async function generateMetadata({
     };
   }
 
+  const description = service.seo?.description || extractTextFromLexical(service.description);
+
   return {
     title: service.seo?.title || service.title,
-    description: service.seo?.description || service.description,
+    description,
     openGraph: {
       title: service.seo?.title || service.title,
-      description: service.seo?.description || service.description,
+      description,
       images:
         service.seo?.ogImage &&
         typeof service.seo.ogImage === "object" &&
@@ -89,7 +92,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 </div>
                 {service.description && (
                   <div className="mxd-article__subtitle loading__item">
-                    <p className="t-large">{service.description}</p>
+                    <p className="t-large">{extractTextFromLexical(service.description)}</p>
                   </div>
                 )}
               </div>
