@@ -4,10 +4,16 @@ import { useEffect, useState } from "react";
 import AnimatedButton from "../animation/AnimatedButton";
 import { usePathname } from "next/navigation";
 import ThemeSwitcherButton from "./ColorSwitcher";
+import type { MenuItem } from "@/utils/getMenus";
 
-export default function Header1() {
+interface Header1Props {
+  menuItems?: MenuItem[];
+}
+
+export default function Header1({ menuItems = [] }: Header1Props) {
   const pathname = usePathname();
   const [isHidden, setIsHidden] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.pageYOffset;
@@ -94,27 +100,26 @@ export default function Header1() {
       {/* Main Navigation */}
       <nav className="mxd-header__nav loading__fade">
         <ul className="mxd-menu">
-          <li className={pathname === "/" ? "active" : ""}>
-            <Link href="/">Home</Link>
-          </li>
-          <li className={pathname === "/about" ? "active" : ""}>
-            <Link href="/about">About</Link>
-          </li>
-          <li className={pathname?.startsWith("/services") ? "active" : ""}>
-            <Link href="/services">Services</Link>
-          </li>
-          <li className={pathname?.startsWith("/projects") ? "active" : ""}>
-            <Link href="/projects">Projects</Link>
-          </li>
-          <li className={pathname?.startsWith("/blog") ? "active" : ""}>
-            <Link href="/blog">Blog</Link>
-          </li>
-          <li className={pathname === "/clients" ? "active" : ""}>
-            <Link href="/clients">Clients</Link>
-          </li>
-          <li className={pathname === "/contact" ? "active" : ""}>
-            <Link href="/contact">Contact</Link>
-          </li>
+          {menuItems.map((item, index) => {
+            const isActive = item.href
+              ? (item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href))
+              : false;
+
+            return (
+              <li key={index} className={isActive ? "active" : ""}>
+                {item.href && (
+                  <Link
+                    href={item.href}
+                    target={item.openInNewTab ? "_blank" : undefined}
+                    rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                    className={item.cssClass}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </nav>
       {/* header controls */}
