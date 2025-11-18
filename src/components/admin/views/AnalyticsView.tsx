@@ -45,10 +45,16 @@ interface AnalyticsData {
   }>
 }
 
-export default function AnalyticsView({ initPageResult }: AdminViewProps) {
+export default function AnalyticsView(props: AdminViewProps) {
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState(7) // Days
+
+  // Provide default values if props are undefined
+  const visibleEntities = props?.initPageResult?.visibleEntities || {
+    collections: [],
+    globals: []
+  }
 
   useEffect(() => {
     fetchAnalytics()
@@ -79,7 +85,7 @@ export default function AnalyticsView({ initPageResult }: AdminViewProps) {
 
   if (loading) {
     return (
-      <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+      <DefaultTemplate viewType="dashboard" visibleEntities={visibleEntities}>
         <div className="analytics-view">
           <div className="analytics-loading">Loading analytics...</div>
         </div>
@@ -89,7 +95,7 @@ export default function AnalyticsView({ initPageResult }: AdminViewProps) {
 
   if (!data) {
     return (
-      <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+      <DefaultTemplate viewType="dashboard" visibleEntities={visibleEntities}>
         <div className="analytics-view">
           <div className="analytics-error">Failed to load analytics data</div>
         </div>
@@ -98,7 +104,7 @@ export default function AnalyticsView({ initPageResult }: AdminViewProps) {
   }
 
   return (
-    <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+    <DefaultTemplate viewType="dashboard" visibleEntities={visibleEntities}>
       <div className="analytics-view">
         <div className="analytics-header">
           <h1>Analytics Dashboard</h1>
