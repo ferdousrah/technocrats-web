@@ -42,6 +42,67 @@ interface PayloadMenu {
   active: boolean
 }
 
+// Default fallback menus
+const DEFAULT_HEADER_MENU: MenuItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Services', href: '/services' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Clients', href: '/clients' },
+  { label: 'Contact', href: '/contact' },
+]
+
+const DEFAULT_MOBILE_MENU: MenuItem[] = [
+  {
+    title: 'Home',
+    submenu: [
+      { label: 'Main home', href: '/home-main' },
+      { label: 'Software development company', href: '/home-software-development-company' },
+      { label: 'Freelancer portfolio', href: '/home-freelancer-portfolio' },
+      { label: 'Digital agency', href: '/home-digital-agency' },
+      { label: 'Creative design studio', href: '/home-creative-design-studio' },
+      { label: 'Personal portfolio', href: '/home-personal-portfolio' },
+      { label: 'Web agency', href: '/home-web-agency' },
+      { label: 'Creative developer', href: '/home-creative-developer' },
+      { label: 'Designer', href: '/home-designer' }
+    ]
+  },
+  {
+    title: 'Works',
+    submenu: [
+      { label: 'Portfolio', href: '/works-simple' },
+      { label: 'Works masonry', href: '/works-masonry' },
+      { label: 'Project details', href: '/project-details' }
+    ]
+  },
+  {
+    title: 'Pages',
+    submenu: [
+      { label: 'About me', href: '/about-me' },
+      { label: 'About us', href: '/about-us' },
+      { label: 'Services', href: '/services' },
+      { label: 'Our team', href: '/team' },
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'FAQ page', href: '/faq' },
+      { label: '404 error page', href: '/404' },
+      { label: 'Landing page', href: '/home-2' }
+    ]
+  },
+  {
+    title: 'Insights',
+    submenu: [
+      { label: 'Blog standard', href: '/blog-standard' },
+      { label: 'Blog creative', href: '/blog-creative' },
+      { label: 'Single post', href: '/blog-article' }
+    ]
+  },
+  {
+    title: 'Contact',
+    href: '/contact'
+  }
+]
+
 // Transform a single menu item from Payload format to component format
 function transformMenuItem(item: PayloadMenuItem): MenuItem {
   let href = ''
@@ -127,45 +188,54 @@ function transformMenuItem(item: PayloadMenuItem): MenuItem {
 }
 
 // Fetch menu by location with caching
-async function fetchMenuByLocation(location: string): Promise<MenuItem[]> {
+async function fetchMenuByLocation(location: string, fallback: MenuItem[]): Promise<MenuItem[]> {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-    const response = await fetch(`${baseUrl}/api/menus?where[location][equals]=${location}&where[active][equals]=true&limit=1`, {
-      next: { revalidate: 3600 }, // Cache for 1 hour
+    const url = `${baseUrl}/api/menus?where[location][equals]=${location}&where[active][equals]=true&limit=1`
+
+    console.log(`[Menu] Fetching menu for location: "${location}" from ${url}`)
+
+    const response = await fetch(url, {
+      next: { revalidate: 60 }, // Cache for 1 minute during development
+      cache: 'no-store', // Disable caching during development
     })
 
+    console.log(`[Menu] Response status: ${response.status} ${response.statusText}`)
+
     if (!response.ok) {
-      console.error(`Failed to fetch menu: ${response.statusText}`)
-      return []
+      console.warn(`[Menu] Failed to fetch menu for location "${location}": ${response.statusText}. Using fallback menu.`)
+      return fallback
     }
 
     const data = await response.json()
+    console.log(`[Menu] Response data:`, JSON.stringify(data, null, 2))
 
     if (!data.docs || data.docs.length === 0) {
-      return []
+      console.warn(`[Menu] No active menu found for location "${location}". Using fallback menu.`)
+      console.log(`[Menu] Available menus in response:`, data.totalDocs || 0)
+      return fallback
     }
 
     const menu: PayloadMenu = data.docs[0]
+    console.log(`[Menu] Found menu: "${menu.name}" with ${menu.items?.length || 0} items`)
+
+    if (!menu.items || menu.items.length === 0) {
+      console.warn(`[Menu] Menu found for location "${location}" but has no items. Using fallback menu.`)
+      return fallback
+    }
 
     // Transform all menu items
-    return menu.items.map(transformMenuItem)
+    const transformed = menu.items.map(transformMenuItem)
+    console.log(`[Menu] Transformed ${transformed.length} menu items for "${location}"`)
+    return transformed
   } catch (error) {
-    console.error('Error fetching menu:', error)
-    return []
+    console.error(`[Menu] Error fetching menu for location "${location}":`, error)
+    console.warn('[Menu] Using fallback menu.')
+    return fallback
   }
 }
 
-// Cached version for better performance
-export const getMenuByLocation = unstable_cache(
-  async (location: string) => fetchMenuByLocation(location),
-  ['menu-by-location'],
-  {
-    revalidate: 3600, // Revalidate every hour
-    tags: ['menus'],
-  }
-)
-
 // Convenience functions for common menu locations
-export const getHeaderMenu = () => getMenuByLocation('header-primary')
-export const getMobileMenu = () => getMenuByLocation('mobile')
-export const getFooterMenu = () => getMenuByLocation('footer-main')
+export const getHeaderMenu = () => fetchMenuByLocation('header-primary', DEFAULT_HEADER_MENU)
+export const getMobileMenu = () => fetchMenuByLocation('mobile', DEFAULT_MOBILE_MENU)
+export const getFooterMenu = () => fetchMenuByLocation('footer-main', [])
