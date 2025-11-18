@@ -14,3 +14,21 @@
 .payload-nav-toggler {
   display: none !important;
 }
+
+/* Ensure custom views are rendered properly with sidebar */
+.template-default {
+  display: flex !important;
+  flex-direction: row !important;
+
+  /* Sidebar should always be visible */
+  > nav {
+    display: flex !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Main content area */
+  > main {
+    flex: 1 !important;
+    overflow-x: hidden !important;
+  }
+}
