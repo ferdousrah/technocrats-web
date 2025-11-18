@@ -41,12 +41,10 @@ export default buildConfig({
         dashboard: {
           Component: './components/admin/dashboard/CustomDashboard',
           path: '/',
-          exact: true,
         },
         analytics: {
           Component: './components/admin/views/AnalyticsView',
           path: '/analytics',
-          exact: true,
         },
       },
     },

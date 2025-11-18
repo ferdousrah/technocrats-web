@@ -1,5 +1,4 @@
 /* Hide Payload's default collapse/minimize button - keep only our custom one */
-/* Target Payload's built-in nav toggler specifically */
 [class*="template-default__nav-toggler"],
 [class*="template__nav-toggler"],
 nav [class*="nav-toggler"]:not(.nav-collapse-btn),
