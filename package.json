@@ -80,5 +80,8 @@
       "esbuild",
       "unrs-resolver"
     ]
+  },
+  "optionalDependencies": {
+    "@next/swc-win32-x64-msvc": "^16.0.3"
   }
 }
