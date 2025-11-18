@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { DefaultTemplate } from '@payloadcms/next/templates'
+import type { AdminViewProps } from 'payload'
 import {
   LineChart,
   Line,
@@ -43,7 +45,7 @@ interface AnalyticsData {
   }>
 }
 
-export default function AnalyticsView() {
+export default function AnalyticsView({ initPageResult }: AdminViewProps) {
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState(7) // Days
@@ -77,22 +79,27 @@ export default function AnalyticsView() {
 
   if (loading) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-loading">Loading analytics...</div>
-      </div>
+      <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+        <div className="analytics-view">
+          <div className="analytics-loading">Loading analytics...</div>
+        </div>
+      </DefaultTemplate>
     )
   }
 
   if (!data) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-error">Failed to load analytics data</div>
-      </div>
+      <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+        <div className="analytics-view">
+          <div className="analytics-error">Failed to load analytics data</div>
+        </div>
+      </DefaultTemplate>
     )
   }
 
   return (
-    <div className="analytics-view">
+    <DefaultTemplate viewType="dashboard" visibleEntities={initPageResult.visibleEntities}>
+      <div className="analytics-view">
         <div className="analytics-header">
           <h1>Analytics Dashboard</h1>
           <div className="time-range-selector">
@@ -350,6 +357,7 @@ export default function AnalyticsView() {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </DefaultTemplate>
   )
 }
