@@ -16,6 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
+import MuiThemeProvider from '../MuiThemeProvider'
 import './AnalyticsView.css'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d', '#ffc658']
@@ -77,45 +78,50 @@ export default function AnalyticsView() {
 
   if (loading) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-loading">Loading analytics...</div>
-      </div>
+      <MuiThemeProvider>
+        <div className="analytics-view">
+          <div className="analytics-loading">Loading analytics...</div>
+        </div>
+      </MuiThemeProvider>
     )
   }
 
   if (!data) {
     return (
-      <div className="analytics-view">
-        <div className="analytics-error">Failed to load analytics data</div>
-      </div>
+      <MuiThemeProvider>
+        <div className="analytics-view">
+          <div className="analytics-error">Failed to load analytics data</div>
+        </div>
+      </MuiThemeProvider>
     )
   }
 
   return (
-    <div className="analytics-view">
-      <div className="analytics-header">
-        <h1>Analytics Dashboard</h1>
-        <div className="time-range-selector">
-          <button
-            className={timeRange === 7 ? 'active' : ''}
-            onClick={() => setTimeRange(7)}
-          >
-            Last 7 Days
-          </button>
-          <button
-            className={timeRange === 30 ? 'active' : ''}
-            onClick={() => setTimeRange(30)}
-          >
-            Last 30 Days
-          </button>
-          <button
-            className={timeRange === 90 ? 'active' : ''}
-            onClick={() => setTimeRange(90)}
-          >
-            Last 90 Days
-          </button>
+    <MuiThemeProvider>
+      <div className="analytics-view">
+        <div className="analytics-header">
+          <h1>Analytics Dashboard</h1>
+          <div className="time-range-selector">
+            <button
+              className={timeRange === 7 ? 'active' : ''}
+              onClick={() => setTimeRange(7)}
+            >
+              Last 7 Days
+            </button>
+            <button
+              className={timeRange === 30 ? 'active' : ''}
+              onClick={() => setTimeRange(30)}
+            >
+              Last 30 Days
+            </button>
+            <button
+              className={timeRange === 90 ? 'active' : ''}
+              onClick={() => setTimeRange(90)}
+            >
+              Last 90 Days
+            </button>
+          </div>
         </div>
-      </div>
 
       {/* Summary Cards */}
       <div className="analytics-summary">
@@ -350,6 +356,7 @@ export default function AnalyticsView() {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </MuiThemeProvider>
   )
 }
