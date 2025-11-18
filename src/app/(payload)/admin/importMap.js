@@ -38,7 +38,6 @@ import { default as default_61264ab934251a15e8ca2cc8f66bc206 } from '../../../co
 import { default as default_c23758562428c44820702092add4b596 } from '../../../components/admin/collections/ContactInquiriesList'
 import { default as default_e2a8c24e34af84a7cd091b259cdb0e41 } from '../../../components/admin/navigation/CustomNav'
 import { default as default_f1a01e3ffbf6b019e40d01928db2823f } from '../../../components/admin/dashboard/CustomDashboard'
-import { default as default_9d80edae6c0796073a05eaf3a6882039 } from '../../../components/admin/views/AnalyticsView'
 
 export const importMap = {
   "./components/admin/collections/UsersList#default": default_7834229b228a266ca510a3aaba96fcbf,
@@ -80,6 +79,5 @@ export const importMap = {
   "./components/admin/collections/BlogList#default": default_61264ab934251a15e8ca2cc8f66bc206,
   "./components/admin/collections/ContactInquiriesList#default": default_c23758562428c44820702092add4b596,
   "./components/admin/navigation/CustomNav#default": default_e2a8c24e34af84a7cd091b259cdb0e41,
-  "./components/admin/dashboard/CustomDashboard#default": default_f1a01e3ffbf6b019e40d01928db2823f,
-  "./components/admin/views/AnalyticsView#default": default_9d80edae6c0796073a05eaf3a6882039
+  "./components/admin/dashboard/CustomDashboard#default": default_f1a01e3ffbf6b019e40d01928db2823f
 }
