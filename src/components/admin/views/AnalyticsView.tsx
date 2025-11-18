@@ -16,6 +16,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
+import MuiThemeProvider from '../MuiThemeProvider'
 import './AnalyticsView.css'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d', '#ffc658']
@@ -43,7 +44,7 @@ interface AnalyticsData {
   }>
 }
 
-export default function AnalyticsView() {
+function AnalyticsViewContent() {
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [timeRange, setTimeRange] = useState(7) // Days
@@ -351,5 +352,14 @@ export default function AnalyticsView() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Wrap with MUI Theme Provider for consistency with CustomDashboard
+export default function AnalyticsView() {
+  return (
+    <MuiThemeProvider>
+      <AnalyticsViewContent />
+    </MuiThemeProvider>
   )
 }
