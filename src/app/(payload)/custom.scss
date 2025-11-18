@@ -5,3 +5,58 @@ nav [class*="nav-toggler"]:not(.nav-collapse-btn),
 nav [class*="NavToggler"]:not(.nav-collapse-btn) {
   display: none !important;
 }
+
+/* Header dropdown menu styles */
+.mxd-header__nav .mxd-menu > li {
+  position: relative;
+}
+
+.mxd-header__nav .menu-item-with-children {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.mxd-header__nav .submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: var(--base);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  list-style: none;
+}
+
+.mxd-header__nav .mxd-menu > li:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mxd-header__nav .submenu li {
+  list-style: none;
+}
+
+.mxd-header__nav .submenu li a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: var(--base-opp);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.mxd-header__nav .submenu li a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  padding-left: 2rem;
+  color: var(--primary);
+}

@@ -105,17 +105,45 @@ export default function Header1({ menuItems = [] }: Header1Props) {
               ? (item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href))
               : false;
 
+            // Check if item has submenu
+            const hasSubmenu = item.submenu && item.submenu.length > 0;
+
             return (
               <li key={index} className={isActive ? "active" : ""}>
-                {item.href && (
-                  <Link
-                    href={item.href}
-                    target={item.openInNewTab ? "_blank" : undefined}
-                    rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-                    className={item.cssClass}
-                  >
-                    {item.label}
-                  </Link>
+                {hasSubmenu ? (
+                  // Item with submenu - render as dropdown
+                  <>
+                    <span className="menu-item-with-children">
+                      {item.label}
+                      <i className="ph-bold ph-caret-down" style={{ marginLeft: '4px', fontSize: '12px' }} />
+                    </span>
+                    <ul className="submenu">
+                      {item.submenu.map((subItem, subIndex) => (
+                        <li key={subIndex}>
+                          <Link
+                            href={subItem.href}
+                            target={subItem.openInNewTab ? "_blank" : undefined}
+                            rel={subItem.openInNewTab ? "noopener noreferrer" : undefined}
+                            className={subItem.cssClass}
+                          >
+                            {subItem.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  // Regular menu item with link
+                  item.href && (
+                    <Link
+                      href={item.href}
+                      target={item.openInNewTab ? "_blank" : undefined}
+                      rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                      className={item.cssClass}
+                    >
+                      {item.label}
+                    </Link>
+                  )
                 )}
               </li>
             );
