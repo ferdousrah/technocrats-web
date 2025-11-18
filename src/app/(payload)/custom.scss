@@ -1,34 +1,8 @@
-/* Hide Payload's default collapse/minimize button */
-.template-default__nav-toggler,
-.nav-toggler,
-.template__nav-toggler,
-[class*="nav-toggler"],
-[class*="NavToggler"],
-.payload-template-default .nav-toggler,
-.payload__nav-toggler {
+/* Hide Payload's default collapse/minimize button - keep only our custom one */
+/* Target Payload's built-in nav toggler specifically */
+[class*="template-default__nav-toggler"],
+[class*="template__nav-toggler"],
+nav [class*="nav-toggler"]:not(.nav-collapse-btn),
+nav [class*="NavToggler"]:not(.nav-collapse-btn) {
   display: none !important;
-}
-
-/* Hide any default Payload minimize controls */
-.payload__nav .payload__nav-toggler,
-.payload-nav-toggler {
-  display: none !important;
-}
-
-/* Ensure custom views are rendered properly with sidebar */
-.template-default {
-  display: flex !important;
-  flex-direction: row !important;
-
-  /* Sidebar should always be visible */
-  > nav {
-    display: flex !important;
-    flex-shrink: 0 !important;
-  }
-
-  /* Main content area */
-  > main {
-    flex: 1 !important;
-    overflow-x: hidden !important;
-  }
 }
