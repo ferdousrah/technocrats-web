@@ -1,7 +1,10 @@
 .analytics-view {
   padding: 2rem;
   background: #f5f5f5;
-  min-height: 100vh;
+  min-height: calc(100vh - 4rem);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .analytics-header {
