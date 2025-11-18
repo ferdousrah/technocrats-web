@@ -42,10 +42,6 @@ export default buildConfig({
           Component: './components/admin/dashboard/CustomDashboard',
           path: '/',
         },
-        analytics: {
-          Component: './components/admin/views/AnalyticsView',
-          path: '/analytics',
-        },
       },
     },
     meta: {
