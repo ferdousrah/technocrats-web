@@ -2,6 +2,7 @@ import ClientLayout from '@/components/frontend/layout/ClientLayout'
 import AnalyticsTracker from '@/components/frontend/analytics/AnalyticsTracker'
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { getHeaderMenu, getMobileMenu } from '@/utils/getMenus'
 import '../globals.css'
 
 export const metadata: Metadata = {
@@ -18,11 +19,17 @@ const setColorSchemeScript = `
 })();
 `
 
-export default function FrontendLayout({
+export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Fetch menus for header and mobile navigation
+  const [headerMenuItems, mobileMenuItems] = await Promise.all([
+    getHeaderMenu(),
+    getMobileMenu(),
+  ])
+
   return (
     <html lang="en" suppressHydrationWarning className="no-touch">
       <head>
@@ -35,7 +42,9 @@ export default function FrontendLayout({
       </head>
       <body>
         <AnalyticsTracker />
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout headerMenuItems={headerMenuItems} mobileMenuItems={mobileMenuItems}>
+          {children}
+        </ClientLayout>
       </body>
     </html>
   )

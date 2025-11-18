@@ -1,17 +1,19 @@
 "use client";
 import Link from "next/link";
-import menuItems from "@/data/menu.json"; // adjust path accordingly
-
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { usePathname } from "next/navigation";
 import AnimatedButton from "../animation/AnimatedButton";
+import type { MenuItem } from "@/utils/getMenus";
 
 gsap.registerPlugin(Flip);
 
-export default function MobileMenu() {
+interface MobileMenuProps {
+  menuItems?: MenuItem[];
+}
+
+export default function MobileMenu({ menuItems = [] }: MobileMenuProps) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -56,7 +58,7 @@ export default function MobileMenu() {
       submenu ? submenu.scrollHeight : 0
     );
     setSubmenuHeights(heights);
-  }, []);
+  }, [menuItems]);
 
   useEffect(() => {
     setActiveSubmenu(-1);
@@ -138,7 +140,7 @@ export default function MobileMenu() {
                         className="main-menu__item fade-in-up-elm"
                         style={{ transitionDelay: `${index * 0.1}s` }}
                       >
-                        {item.submenu ? (
+                        {item.submenu && item.submenu.length > 0 ? (
                           <>
                             <div
                               className="main-menu__toggle"
@@ -149,7 +151,7 @@ export default function MobileMenu() {
                               }
                             >
                               <AnimatedButton
-                                text={item.title}
+                                text={item.title || item.label}
                                 as="span"
                                 className="main-menu__link btn btn-anim"
                               ></AnimatedButton>
@@ -184,21 +186,26 @@ export default function MobileMenu() {
                                     isMenuActive(sub.href) ? "active" : ""
                                   }`}
                                 >
-                                  <Link href={sub.href}>{sub.label}</Link>
+                                  <Link
+                                    href={sub.href}
+                                    target={sub.openInNewTab ? "_blank" : undefined}
+                                    rel={sub.openInNewTab ? "noopener noreferrer" : undefined}
+                                    className={sub.cssClass}
+                                  >
+                                    {sub.label}
+                                  </Link>
                                 </li>
                               ))}
                             </ul>
                           </>
                         ) : (
                           <>
-                            {item.href ? (
+                            {item.href && (
                               <AnimatedButton
-                                text={item.title}
+                                text={item.title || item.label}
                                 className="main-menu__link btn btn-anim"
                                 href={item.href}
                               ></AnimatedButton>
-                            ) : (
-                              ""
                             )}
                           </>
                         )}
