@@ -1,35 +1,7 @@
 /* Hide Payload's default collapse/minimize button - keep only our custom one */
-/* Target Payload's built-in nav toggler specifically */
 [class*="template-default__nav-toggler"],
 [class*="template__nav-toggler"],
 nav [class*="nav-toggler"]:not(.nav-collapse-btn),
 nav [class*="NavToggler"]:not(.nav-collapse-btn) {
   display: none !important;
-}
-
-/* Ensure admin layout structure is maintained for all custom views */
-/* Target Payload's template container */
-[class*="template-default"],
-[class*="template--default"],
-.payload-template,
-body[class*="admin"] > div:first-child {
-  display: flex !important;
-  min-height: 100vh;
-
-  > nav {
-    display: flex !important;
-    flex-shrink: 0;
-  }
-
-  > main {
-    flex: 1;
-    min-width: 0;
-    overflow-x: hidden;
-  }
-}
-
-/* Ensure analytics view doesn't break out of layout */
-.analytics-view {
-  position: relative !important;
-  max-width: 100%;
 }
