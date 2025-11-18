@@ -1,0 +1,16 @@
+/* Hide Payload's default collapse/minimize button */
+.template-default__nav-toggler,
+.nav-toggler,
+.template__nav-toggler,
+[class*="nav-toggler"],
+[class*="NavToggler"],
+.payload-template-default .nav-toggler,
+.payload__nav-toggler {
+  display: none !important;
+}
+
+/* Hide any default Payload minimize controls */
+.payload__nav .payload__nav-toggler,
+.payload-nav-toggler {
+  display: none !important;
+}
