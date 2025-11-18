@@ -71,6 +71,7 @@ export interface Project {
   id: string
   title: string
   slug: string
+  summary: string
   description: string
   content?: any
   featuredImage?: string | Media

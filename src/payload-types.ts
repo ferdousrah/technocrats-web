@@ -81,6 +81,10 @@ export interface Config {
     'blog-tags': BlogTag;
     blog: Blog;
     'contact-inquiries': ContactInquiry;
+    'page-views': PageView;
+    sessions: Session;
+    visitors: Visitor;
+    'daily-stats': DailyStat;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -102,6 +106,10 @@ export interface Config {
     'blog-tags': BlogTagsSelect<false> | BlogTagsSelect<true>;
     blog: BlogSelect<false> | BlogSelect<true>;
     'contact-inquiries': ContactInquiriesSelect<false> | ContactInquiriesSelect<true>;
+    'page-views': PageViewsSelect<false> | PageViewsSelect<true>;
+    sessions: SessionsSelect<false> | SessionsSelect<true>;
+    visitors: VisitorsSelect<false> | VisitorsSelect<true>;
+    'daily-stats': DailyStatsSelect<false> | DailyStatsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -1537,6 +1545,248 @@ export interface ContactInquiry {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-views".
+ */
+export interface PageView {
+  id: number;
+  /**
+   * The page URL path visited
+   */
+  page: string;
+  /**
+   * Unique visitor identifier (hashed)
+   */
+  visitorId: string;
+  /**
+   * Session identifier
+   */
+  sessionId: string;
+  /**
+   * Page referrer URL
+   */
+  referrer?: string | null;
+  /**
+   * Traffic source channel
+   */
+  source?: ('direct' | 'organic' | 'social' | 'referral' | 'email' | 'paid' | 'other') | null;
+  utm?: {
+    source?: string | null;
+    medium?: string | null;
+    campaign?: string | null;
+    term?: string | null;
+    content?: string | null;
+  };
+  /**
+   * Visitor country code (ISO 3166-1 alpha-2)
+   */
+  country?: string | null;
+  /**
+   * Visitor city
+   */
+  city?: string | null;
+  device?: ('desktop' | 'mobile' | 'tablet') | null;
+  browser?: string | null;
+  os?: string | null;
+  screenWidth?: number | null;
+  screenHeight?: number | null;
+  /**
+   * Time spent on page in seconds
+   */
+  duration?: number | null;
+  /**
+   * Was this the exit page for the session?
+   */
+  exitPage?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions".
+ */
+export interface Session {
+  id: number;
+  /**
+   * Unique session identifier
+   */
+  sessionId: string;
+  /**
+   * Unique visitor identifier (hashed)
+   */
+  visitorId: string;
+  /**
+   * Is this a new visitor?
+   */
+  isNew?: boolean | null;
+  /**
+   * Session start time
+   */
+  startedAt: string;
+  /**
+   * Session end time
+   */
+  endedAt?: string | null;
+  /**
+   * Total session duration in seconds
+   */
+  duration?: number | null;
+  /**
+   * Number of pages viewed in session
+   */
+  pageViews?: number | null;
+  /**
+   * Did visitor bounce? (left after viewing only 1 page)
+   */
+  bounced?: boolean | null;
+  /**
+   * First page visited in session
+   */
+  landingPage?: string | null;
+  /**
+   * Last page visited in session
+   */
+  exitPage?: string | null;
+  referrer?: string | null;
+  source?: ('direct' | 'organic' | 'social' | 'referral' | 'email' | 'paid' | 'other') | null;
+  country?: string | null;
+  city?: string | null;
+  device?: ('desktop' | 'mobile' | 'tablet') | null;
+  browser?: string | null;
+  os?: string | null;
+  /**
+   * Is this session currently active? (last activity < 30 min)
+   */
+  isActive?: boolean | null;
+  /**
+   * Last activity timestamp
+   */
+  lastActivityAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors".
+ */
+export interface Visitor {
+  id: number;
+  /**
+   * Unique visitor identifier (hashed)
+   */
+  visitorId: string;
+  /**
+   * First visit timestamp
+   */
+  firstVisit: string;
+  /**
+   * Last visit timestamp
+   */
+  lastVisit: string;
+  /**
+   * Total number of sessions
+   */
+  sessionsCount: number;
+  /**
+   * Total page views across all sessions
+   */
+  totalPageViews: number;
+  /**
+   * Total time spent on site in seconds
+   */
+  totalDuration?: number | null;
+  /**
+   * Average session duration in seconds
+   */
+  averageDuration?: number | null;
+  country?: string | null;
+  city?: string | null;
+  device?: ('desktop' | 'mobile' | 'tablet') | null;
+  browser?: string | null;
+  os?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "daily-stats".
+ */
+export interface DailyStat {
+  id: number;
+  /**
+   * Date for these statistics (YYYY-MM-DD)
+   */
+  date: string;
+  /**
+   * Number of unique visitors
+   */
+  uniqueVisitors: number;
+  /**
+   * Total page views
+   */
+  totalPageViews: number;
+  /**
+   * Number of new visitors
+   */
+  newVisitors: number;
+  /**
+   * Number of returning visitors
+   */
+  returningVisitors: number;
+  /**
+   * Total sessions
+   */
+  totalSessions: number;
+  /**
+   * Number of bounced sessions
+   */
+  bouncedSessions: number;
+  /**
+   * Bounce rate percentage
+   */
+  bounceRate?: number | null;
+  /**
+   * Average session duration in seconds
+   */
+  averageSessionDuration?: number | null;
+  /**
+   * Average page views per session
+   */
+  averagePageViewsPerSession?: number | null;
+  /**
+   * Top 10 pages by views
+   */
+  topPages?:
+    | {
+        page: string;
+        views: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Traffic by source channel
+   */
+  trafficSources?:
+    | {
+        source: string;
+        sessions: number;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Top countries by visitors
+   */
+  countries?:
+    | {
+        country: string;
+        visitors: number;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -1614,6 +1864,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-inquiries';
         value: number | ContactInquiry;
+      } | null)
+    | ({
+        relationTo: 'page-views';
+        value: number | PageView;
+      } | null)
+    | ({
+        relationTo: 'sessions';
+        value: number | Session;
+      } | null)
+    | ({
+        relationTo: 'visitors';
+        value: number | Visitor;
+      } | null)
+    | ({
+        relationTo: 'daily-stats';
+        value: number | DailyStat;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -2267,6 +2533,123 @@ export interface ContactInquiriesSelect<T extends boolean = true> {
   priority?: T;
   notes?: T;
   followUpDate?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-views_select".
+ */
+export interface PageViewsSelect<T extends boolean = true> {
+  page?: T;
+  visitorId?: T;
+  sessionId?: T;
+  referrer?: T;
+  source?: T;
+  utm?:
+    | T
+    | {
+        source?: T;
+        medium?: T;
+        campaign?: T;
+        term?: T;
+        content?: T;
+      };
+  country?: T;
+  city?: T;
+  device?: T;
+  browser?: T;
+  os?: T;
+  screenWidth?: T;
+  screenHeight?: T;
+  duration?: T;
+  exitPage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sessions_select".
+ */
+export interface SessionsSelect<T extends boolean = true> {
+  sessionId?: T;
+  visitorId?: T;
+  isNew?: T;
+  startedAt?: T;
+  endedAt?: T;
+  duration?: T;
+  pageViews?: T;
+  bounced?: T;
+  landingPage?: T;
+  exitPage?: T;
+  referrer?: T;
+  source?: T;
+  country?: T;
+  city?: T;
+  device?: T;
+  browser?: T;
+  os?: T;
+  isActive?: T;
+  lastActivityAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "visitors_select".
+ */
+export interface VisitorsSelect<T extends boolean = true> {
+  visitorId?: T;
+  firstVisit?: T;
+  lastVisit?: T;
+  sessionsCount?: T;
+  totalPageViews?: T;
+  totalDuration?: T;
+  averageDuration?: T;
+  country?: T;
+  city?: T;
+  device?: T;
+  browser?: T;
+  os?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "daily-stats_select".
+ */
+export interface DailyStatsSelect<T extends boolean = true> {
+  date?: T;
+  uniqueVisitors?: T;
+  totalPageViews?: T;
+  newVisitors?: T;
+  returningVisitors?: T;
+  totalSessions?: T;
+  bouncedSessions?: T;
+  bounceRate?: T;
+  averageSessionDuration?: T;
+  averagePageViewsPerSession?: T;
+  topPages?:
+    | T
+    | {
+        page?: T;
+        views?: T;
+        id?: T;
+      };
+  trafficSources?:
+    | T
+    | {
+        source?: T;
+        sessions?: T;
+        id?: T;
+      };
+  countries?:
+    | T
+    | {
+        country?: T;
+        visitors?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
