@@ -1,4 +1,5 @@
 import ClientLayout from '@/components/frontend/layout/ClientLayout'
+import AnalyticsTracker from '@/components/frontend/analytics/AnalyticsTracker'
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import '../globals.css'
@@ -33,6 +34,7 @@ export default function FrontendLayout({
         />
       </head>
       <body>
+        <AnalyticsTracker />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

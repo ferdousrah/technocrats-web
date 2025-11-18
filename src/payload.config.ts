@@ -20,6 +20,10 @@ import { BlogTags } from './collections/BlogTags'
 import { Blog } from './collections/Blog'
 import { ContactInquiries } from './collections/ContactInquiries'
 import { Menus } from './collections/Menus'
+import { PageViews } from './collections/PageViews'
+import { Sessions } from './collections/Sessions'
+import { Visitors } from './collections/Visitors'
+import { DailyStats } from './collections/DailyStats'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -65,6 +69,10 @@ export default buildConfig({
     BlogTags,
     Blog,
     ContactInquiries,
+    PageViews,
+    Sessions,
+    Visitors,
+    DailyStats,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
