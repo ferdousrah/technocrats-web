@@ -89,6 +89,42 @@ svg {
   vertical-align: middle;
 }
 
+/* Pinned sections z-index management */
+.mxd-pinned-projects {
+  position: relative;
+  z-index: 1;
+}
+
+.mxd-pinned-projects__static {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure sections after pinned projects have higher z-index */
+.mxd-pinned-projects + .mxd-section,
+.mxd-section:has(+ .mxd-pinned-projects) ~ .mxd-section {
+  position: relative;
+  z-index: 2;
+}
+
+/* Partners/Client logos section */
+.mxd-partners-cards {
+  position: relative;
+  z-index: 10;
+  background: var(--base, #000);
+}
+
+/* When GSAP pins an element, it adds pin-spacer wrapper */
+.pin-spacer {
+  z-index: 1 !important;
+}
+
+/* Ensure content below pinned section appears on top when scrolling */
+.mxd-section {
+  position: relative;
+  background: var(--base, #000);
+}
+
 .home {
   display: flex;
   flex-direction: column;

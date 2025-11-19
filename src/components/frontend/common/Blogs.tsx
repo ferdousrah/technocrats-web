@@ -106,15 +106,25 @@ export default async function Blogs({
                             />
                           </i>
                         </div>
-                        {blog.categories && blog.categories.length > 0 && (
+                        {(blog.category || (blog.tags && blog.tags.length > 0)) && (
                           <div className="mxd-blog-preview__tags">
-                            {blog.categories.slice(0, 2).map((category) => (
+                            {blog.category && typeof blog.category === 'object' && (
                               <span
-                                key={category.id}
+                                key={blog.category.id}
                                 className="tag tag-default tag-permanent"
                               >
-                                {category.name}
+                                {blog.category.name}
                               </span>
+                            )}
+                            {blog.tags && blog.tags.slice(0, 1).map((tag) => (
+                              typeof tag === 'object' && (
+                                <span
+                                  key={tag.id}
+                                  className="tag tag-default tag-permanent"
+                                >
+                                  {tag.name}
+                                </span>
+                              )
                             ))}
                           </div>
                         )}

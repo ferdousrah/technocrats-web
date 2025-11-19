@@ -73,5 +73,17 @@ export default function LenisSmoothScroll() {
   ) {
     return null;
   }
-  return <ReactLenis root />;
+  return (
+    <ReactLenis
+      root
+      options={{
+        lerp: 0.1,
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false,
+      }}
+    />
+  );
 }
