@@ -218,6 +218,54 @@ export default function useGsapScrollScaleAnimations() {
         delay: 1000,
       });
 
+      // ✅ Pinned projects scroll animation
+      // Only apply on desktop (>= 1200px) where the layout is side-by-side
+      if (window.innerWidth >= 1200) {
+        const pinnedProjects = document.querySelectorAll(".mxd-pinned-projects");
+        pinnedProjects.forEach((container) => {
+          const staticSection = container.querySelector(".mxd-pinned-projects__static");
+          const scrollSection = container.querySelector(".mxd-pinned-projects__scroll");
+
+          if (staticSection && scrollSection) {
+            // Calculate the scroll distance based on the scroll section's height minus the static section
+            const scrollHeight = scrollSection.scrollHeight;
+            const staticHeight = staticSection.clientHeight;
+            const endOffset = scrollHeight - staticHeight;
+
+            ScrollTrigger.create({
+              trigger: container,
+              start: "top top",
+              end: () => `+=${endOffset > 0 ? endOffset : scrollHeight}`,
+              pin: staticSection,
+              pinSpacing: false,
+              anticipatePin: 1,
+            });
+          }
+        });
+
+        // Also handle universal pinned sections (experiences, education, etc.)
+        const pinnedUniversal = document.querySelectorAll(".mxd-pinned-universal");
+        pinnedUniversal.forEach((container) => {
+          const staticSection = container.querySelector(".mxd-pinned-universal__static");
+          const scrollSection = container.querySelector(".mxd-pinned-universal__scroll");
+
+          if (staticSection && scrollSection) {
+            const scrollHeight = scrollSection.scrollHeight;
+            const staticHeight = staticSection.clientHeight;
+            const endOffset = scrollHeight - staticHeight;
+
+            ScrollTrigger.create({
+              trigger: container,
+              start: "top top",
+              end: () => `+=${endOffset > 0 ? endOffset : scrollHeight}`,
+              pin: staticSection,
+              pinSpacing: false,
+              anticipatePin: 1,
+            });
+          }
+        });
+      }
+
       // ✅ Loading animation
       const loadingWrap = document.querySelector(".loading-wrap");
       if (loadingWrap) {
@@ -277,7 +325,9 @@ export default function useGsapScrollScaleAnimations() {
               element.classList.contains("animate-card-2") ||
               element.classList.contains("animate-card-3") ||
               element.classList.contains("animate-card-4") ||
-              element.classList.contains("animate-card-5"))
+              element.classList.contains("animate-card-5") ||
+              element.classList.contains("mxd-pinned-projects") ||
+              element.classList.contains("mxd-pinned-universal"))
           );
         })
         .forEach((st) => st.kill());
